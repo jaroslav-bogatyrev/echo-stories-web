@@ -33,26 +33,14 @@ const base = import.meta.env.BASE_URL;
             <p class="text-base text-gray-600 mb-4">Producer</p>
           </div>
 
-          <div class="space-y-4">
-            <div>
-              <h3 class="text-sm text-gray-500 mb-2">Email</h3>
-              <a
-                href="mailto:iuliiamamaeva@gmail.com"
-                class="text-base hover:opacity-60 transition-opacity"
-              >
-                iuliiamamaeva@gmail.com
-              </a>
-            </div>
-
-            <div>
-              <h3 class="text-sm text-gray-500 mb-2">Phone</h3>
-              <a
-                href="tel:+420792530617"
-                class="text-base hover:opacity-60 transition-opacity"
-              >
-                +420 792 530 617
-              </a>
-            </div>
+          <div>
+            <h3 class="text-sm text-gray-500 mb-2">Email</h3>
+            <a
+              href={`mailto:${siteConfig.email}`}
+              class="text-base hover:opacity-60 transition-opacity"
+            >
+              {siteConfig.email}
+            </a>
           </div>
         </div>
       </div>

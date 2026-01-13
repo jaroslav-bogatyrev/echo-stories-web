@@ -33,4 +33,5 @@ export interface GalleryImage {
 export interface SiteConfig {
   siteName: string;
   location: string;
+  email: string;
 }

@@ -28,11 +28,13 @@ Add these **A records** for echo-stories.cz:
 | A    | @    | 185.199.110.153 | 3600 |
 | A    | @    | 185.199.111.153 | 3600 |
 
-**Optional** - Add CNAME for www:
+**Optional** - Add CNAME for www (removes GitHub Pages warning):
 
 | Type  | Host | Value                        | TTL  |
 |-------|------|------------------------------|------|
 | CNAME | www  | jaroslav-bogatyrev.github.io | 3600 |
+
+**Note:** For WEDOS, enter without trailing dot. WEDOS adds it automatically.
 
 **Common registrars:**
 - **Cloudflare:** DNS → Records (set to DNS only / gray cloud)
@@ -61,10 +63,20 @@ Visit https://echo-stories.cz
 
 ## 🔧 Troubleshooting
 
+**"www subdomain is improperly configured" error:**
+- This is **normal** if you didn't add CNAME for www
+- Your site will still work perfectly on `echo-stories.cz`
+- GitHub automatically redirects `www` → main domain
+- To remove error: Add CNAME record on WEDOS (see step 2 above)
+- Or simply ignore it - not critical!
+
 **DNS not resolving:**
 - Clear cache: `sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder`
 - Try incognito mode
 - Wait longer (up to 24 hours)
+- **Check authoritative DNS:** `dig @ns.wedos.cz echo-stories.cz +short`
+  - If WEDOS returns correct IPs but your local DNS doesn't, it's just propagation delay
+  - This is normal and will resolve itself within 6-24 hours
 
 **GitHub Pages 404:**
 - Verify CNAME file exists in repo
