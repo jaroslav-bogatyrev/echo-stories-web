@@ -5,8 +5,8 @@ import mdx from '@astrojs/mdx';
 // https://astro.build/config
 export default defineConfig({
   integrations: [tailwind(), mdx()],
-  site: 'https://yoursite.com',
-  base: '/',
+  site: 'https://jaroslav-bogatyrev.github.io',
+  base: '/echo-stories-web',
   build: {
     format: 'file',
   },
