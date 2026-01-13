@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import Layout from '@/layouts/Layout.astro';
 
 const projects = await getCollection('projects');
+const base = import.meta.env.BASE_URL;
 
 // Load images dynamically
 const images = import.meta.glob<{ default: ImageMetadata }>('/src/content/projects/**/*.{jpg,jpeg,png,svg}', { eager: true });
@@ -78,7 +79,7 @@ const sortedProjects = projectsWithImages.sort((a, b) => {
           </div>
         ) : (
           <a
-            href={`/${project.id.replace('/index', '')}`}
+            href={`${base}/${project.id.replace('/index', '')}`.replace(/\/+/g, '/')}
             class="group relative aspect-video overflow-hidden bg-gray-100"
           >
             {project.imageModule && (

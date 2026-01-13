@@ -2,12 +2,14 @@
 import { siteConfig } from "@/lib/config";
 
 const pathname = Astro.url.pathname;
+const base = import.meta.env.BASE_URL;
 
 const isActive = (path: string) => {
+  const fullPath = path === "/" ? base : `${base}${path}`.replace(/\/+/g, '/');
   if (path === "/") {
-    return pathname === "/";
+    return pathname === fullPath || pathname === base;
   }
-  return pathname.startsWith(path);
+  return pathname.startsWith(fullPath);
 };
 ---
 
@@ -15,7 +17,7 @@ const isActive = (path: string) => {
   <div class="max-w-7xl mx-auto px-6 py-5">
     <nav class="flex justify-between items-baseline">
       <a 
-        href="/" 
+        href={base}
         class="group flex items-center gap-3"
       >
         <div class="relative">
@@ -28,7 +30,7 @@ const isActive = (path: string) => {
       
       <div class="flex gap-8 md:gap-12">
         <a
-          href="/about"
+          href={`${base}/about`.replace(/\/+/g, '/')}
           class={`text-base md:text-lg tracking-tight transition-colors duration-200 ${
             isActive("/about") 
               ? "text-gray-900" 
@@ -38,7 +40,7 @@ const isActive = (path: string) => {
           About
         </a>
         <a
-          href="/contact"
+          href={`${base}/contact`.replace(/\/+/g, '/')}
           class={`text-base md:text-lg tracking-tight transition-colors duration-200 ${
             isActive("/contact") 
               ? "text-gray-900" 

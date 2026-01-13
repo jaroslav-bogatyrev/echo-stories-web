@@ -20,6 +20,7 @@ export async function getStaticPaths() {
 }
 
 const { project, slug } = Astro.props;
+const base = import.meta.env.BASE_URL;
 
 // Read synopsis files from paths defined in frontmatter
 let synopsisEn = '';
@@ -391,7 +392,7 @@ if (sortedProjects.length > 1) {
     <nav class="mt-12 flex justify-between border-t border-gray-200 pt-8">
       <div>
         {prevProject && (
-          <a href={`/${prevProject.id.replace('/index', '')}`} class="group flex items-center gap-2 hover:text-gray-600">
+          <a href={`${base}/${prevProject.id.replace('/index', '')}`.replace(/\/+/g, '/')} class="group flex items-center gap-2 hover:text-gray-600">
             <span class="text-2xl">←</span>
             <div>
               <div class="text-sm text-gray-500">Previous</div>
@@ -402,7 +403,7 @@ if (sortedProjects.length > 1) {
       </div>
       <div class="text-right">
         {nextProject && (
-          <a href={`/${nextProject.id.replace('/index', '')}`} class="group flex items-center gap-2 hover:text-gray-600">
+          <a href={`${base}/${nextProject.id.replace('/index', '')}`.replace(/\/+/g, '/')} class="group flex items-center gap-2 hover:text-gray-600">
             <div>
               <div class="text-sm text-gray-500">Next</div>
               <div class="group-hover:underline">{nextProject.data.title.en}</div>
