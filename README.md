@@ -153,15 +153,27 @@ Project content schema is defined in `src/content/config.ts`. Modify if you need
 
 ## 🚢 Deployment
 
+### Custom Domain Setup
+
+This site is configured for a custom domain. See [docs/CUSTOM_DOMAIN_SETUP.md](docs/CUSTOM_DOMAIN_SETUP.md) for complete setup instructions.
+
+**Quick steps:**
+1. Update `public/CNAME` with your domain
+2. Configure DNS at your domain registrar
+3. Update `astro.config.mjs` with your domain
+4. Enable custom domain in GitHub Pages settings
+
+### Building for Production
+
 Build the production site:
 ```bash
 npm run build
 ```
 
 The output will be in the `dist/` directory, ready to deploy to any static hosting service:
+- GitHub Pages (with custom domain)
 - Netlify
 - Vercel
-- GitHub Pages
 - Cloudflare Pages
 
 ## 📄 License
