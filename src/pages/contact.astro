@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { siteConfig } from '../lib/config';
+
+const base = import.meta.env.BASE_URL;
 ---
 
 <Layout 
@@ -17,7 +19,7 @@ import { siteConfig } from '../lib/config';
         <div class="flex-shrink-0">
           <div class="w-48 h-48 rounded-lg overflow-hidden bg-gray-200">
             <img
-              src="/profile.jpg"
+              src={`${base}/profile.jpg`.replace(/\/+/g, '/')}
               alt="Iuliia Mamaeva - Producer"
               class="w-full h-full object-cover"
             />
