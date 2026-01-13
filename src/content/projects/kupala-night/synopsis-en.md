@@ -6,4 +6,4 @@ When she reaches her apartment door, Yana realizes she has forgotten her keys. T
 
 Yana is a social chameleon who adapts to everyone but cannot find herself. "Kupala Night" uses an episodic, multi-perspective structure: Zoya hides her roots to fit in, Polina avoids her prison trauma, and Bojan literally lives in the past. Together, Yana and her friends represent an emotional reality of a fractured worldview of an immigrant.
 
-Project selected as a participant in the BIFA pitching event at Berlinale 2026.
+Project will be presented at the BIFA pitching event at Berlinale 2026.

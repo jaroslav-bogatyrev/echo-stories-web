@@ -6,5 +6,5 @@ Když dorazí ke dveřím svého bytu, Yana si uvědomí, že zapomněla klíče
 
 Yana je společenský chameleon, který se dokáže přizpůsobit každému, ale sám sebe nedokáže najít. *Kupala Night* využívá epizodickou, multiperspektivní strukturu: Zoya skrývá své kořeny, aby zapadla, Polina se vyhýbá traumatu z vězení a Bojan doslova žije v minulosti. Společně Yana a její přátelé představují emocionální realitu roztříštěného světonázoru imigranta.
 
-Projekt byl vybrán jako účastník pitchingového fóra BIFA v rámci Berlinale 2026.
+Projekt bude prezentován na pitchingovém fóru BIFA v rámci Berlinale 2026.
 
