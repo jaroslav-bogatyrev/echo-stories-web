@@ -1,0 +1,53 @@
+---
+import { siteConfig } from "@/lib/config";
+
+const pathname = Astro.url.pathname;
+
+const isActive = (path: string) => {
+  if (path === "/") {
+    return pathname === "/";
+  }
+  return pathname.startsWith(path);
+};
+---
+
+<header class="border-b border-gray-100">
+  <div class="max-w-7xl mx-auto px-6 py-5">
+    <nav class="flex justify-between items-baseline">
+      <a 
+        href="/" 
+        class="group flex items-center gap-3"
+      >
+        <div class="relative">
+          <span class="font-serif text-xl md:text-2xl font-medium tracking-tight text-gray-900 transition-all duration-300 group-hover:text-gray-600">
+            {siteConfig.siteName}
+          </span>
+          <div class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-900 transition-all duration-300 group-hover:w-full"></div>
+        </div>
+      </a>
+      
+      <div class="flex gap-8 md:gap-12">
+        <a
+          href="/about"
+          class={`text-base md:text-lg tracking-tight transition-colors duration-200 ${
+            isActive("/about") 
+              ? "text-gray-900" 
+              : "text-gray-400 hover:text-gray-900"
+          }`}
+        >
+          About
+        </a>
+        <a
+          href="/contact"
+          class={`text-base md:text-lg tracking-tight transition-colors duration-200 ${
+            isActive("/contact") 
+              ? "text-gray-900" 
+              : "text-gray-400 hover:text-gray-900"
+          }`}
+        >
+          Contact
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>

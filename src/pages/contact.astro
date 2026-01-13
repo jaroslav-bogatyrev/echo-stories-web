@@ -1,0 +1,81 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { siteConfig } from '../lib/config';
+---
+
+<Layout 
+  title="Contact - Echo Stories"
+  description="Get in touch with Echo Stories. We'd love to hear from you!"
+>
+  <div class="max-w-3xl mx-auto px-6 py-12 md:py-16">
+    <h1 class="text-2xl md:text-3xl font-medium mb-12">Contact</h1>
+    
+    <!-- Producer Profile Section -->
+    <div class="mb-12 pb-12 border-b border-gray-200">
+      <div class="flex flex-col md:flex-row gap-8 items-start">
+        <!-- Profile Photo -->
+        <div class="flex-shrink-0">
+          <div class="w-48 h-48 rounded-lg overflow-hidden bg-gray-200">
+            <img
+              src="/profile.jpg"
+              alt="Iuliia Mamaeva - Producer"
+              class="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+
+        <!-- Profile Info with Contact Details -->
+        <div class="flex-1 space-y-6">
+          <div>
+            <h2 class="text-xl md:text-2xl font-medium mb-2">Iuliia Mamaeva</h2>
+            <p class="text-base text-gray-600 mb-4">Producer</p>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <h3 class="text-sm text-gray-500 mb-2">Email</h3>
+              <a
+                href="mailto:iuliiamamaeva@gmail.com"
+                class="text-base hover:opacity-60 transition-opacity"
+              >
+                iuliiamamaeva@gmail.com
+              </a>
+            </div>
+
+            <div>
+              <h3 class="text-sm text-gray-500 mb-2">Phone</h3>
+              <a
+                href="tel:+420792530617"
+                class="text-base hover:opacity-60 transition-opacity"
+              >
+                +420 792 530 617
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Company Address and Information -->
+    <div class="grid md:grid-cols-2 gap-x-12 gap-y-8">
+      <!-- Left Column - Company Info -->
+      <div>
+        <h3 class="text-sm text-gray-500 mb-2">Company Information</h3>
+        <div class="space-y-1 text-base text-gray-600">
+          <p>Echo Stories (production label)</p>
+          <p>Echo Film Production s.r.o.</p>
+          <p>IČO: 24107514</p>
+          <p>DIČ: CZ24107514</p>
+        </div>
+      </div>
+
+      <!-- Right Column - Address -->
+      <div>
+        <h3 class="text-sm text-gray-500 mb-2">Address</h3>
+        <p class="text-base">Příčná 1892/4, Nové Město</p>
+        <p class="text-base">11000 Praha 1</p>
+        <p class="text-base text-gray-600 mt-1">{siteConfig.location}</p>
+      </div>
+    </div>
+  </div>
+</Layout>

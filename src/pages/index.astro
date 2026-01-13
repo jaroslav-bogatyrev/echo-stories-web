@@ -1,0 +1,121 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Layout from '@/layouts/Layout.astro';
+
+const projects = await getCollection('projects');
+
+// Load images dynamically
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/content/projects/**/*.{jpg,jpeg,png,svg}', { eager: true });
+
+const projectsWithImages = await Promise.all(
+  projects.map(async (project) => {
+    const slug = project.id.replace('/index', '');
+    const imagePath = `/src/content/projects/${slug}/${project.data.image.replace('./', '')}`;
+    const imageModule = images[imagePath];
+    return {
+      ...project,
+      imageModule: imageModule?.default
+    };
+  })
+);
+
+const sortedProjects = projectsWithImages.sort((a, b) => {
+  // Sort by order if available, otherwise by year descending
+  if (a.data.order !== undefined && b.data.order !== undefined) {
+    return a.data.order - b.data.order;
+  }
+  return b.data.year - a.data.year;
+});
+---
+
+<Layout title="Projects">
+  <div class="mx-auto max-w-7xl px-4 py-12">
+    <div class="grid gap-8 md:grid-cols-2">
+      {sortedProjects.map(project => {
+        const isLocked = project.data.locked === true;
+
+        return isLocked ? (
+          <div class="group relative aspect-video overflow-hidden bg-gray-100 cursor-not-allowed opacity-75">
+            {project.imageModule && (
+              <Image
+                src={project.imageModule}
+                alt={project.data.title.en}
+                class="h-full w-full object-cover transition-transform duration-300 blur-sm"
+                widths={[400, 800, 1200]}
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+            )}
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+            <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+              <h2 class="mb-2 font-serif text-2xl md:text-3xl">
+                {project.data.title.en}
+                {project.data.title.cz && <span class="italic"> \ {project.data.title.cz}</span>}
+              </h2>
+              <div class="mb-2 flex flex-wrap gap-2 text-sm opacity-90">
+                <span class="capitalize">{project.data.category.join(', ')}</span>
+                <span>•</span>
+                <span>{project.data.year}</span>
+                {project.data.duration && (
+                  <>
+                    <span>•</span>
+                    <span>{project.data.duration}</span>
+                  </>
+                )}
+              </div>
+              {project.data.logline && (
+                <p class="line-clamp-2 text-sm opacity-80">
+                  {project.data.logline.en}
+                </p>
+              )}
+              <div class="mt-2 flex items-center gap-2 text-xs opacity-70">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <span>Project details coming soon</span>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <a
+            href={`/${project.id.replace('/index', '')}`}
+            class="group relative aspect-video overflow-hidden bg-gray-100"
+          >
+            {project.imageModule && (
+              <Image
+                src={project.imageModule}
+                alt={project.data.title.en}
+                class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                widths={[400, 800, 1200]}
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+            )}
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+            <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+              <h2 class="mb-2 font-serif text-2xl md:text-3xl">
+                {project.data.title.en}
+                {project.data.title.cz && <span class="italic"> \ {project.data.title.cz}</span>}
+              </h2>
+              <div class="mb-2 flex flex-wrap gap-2 text-sm opacity-90">
+                <span class="capitalize">{project.data.category.join(', ')}</span>
+                <span>•</span>
+                <span>{project.data.year}</span>
+                {project.data.duration && (
+                  <>
+                    <span>•</span>
+                    <span>{project.data.duration}</span>
+                  </>
+                )}
+              </div>
+              {project.data.logline && (
+                <p class="line-clamp-2 text-sm opacity-80">
+                  {project.data.logline.en}
+                </p>
+              )}
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</Layout>
