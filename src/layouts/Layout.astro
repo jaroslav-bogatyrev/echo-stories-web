@@ -61,6 +61,33 @@ const imageURL = new URL(image, Astro.site);
       gtag('js', new Date());
       gtag('config', 'G-0HTHGXJWJN');
     </script>
+
+    <!-- JSON-LD Structured Data for Organization -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Echo Stories",
+        "url": "https://echo-stories.cz",
+        "logo": "https://echo-stories.cz/profile.jpg",
+        "description": "Independent film production company based in Prague, Czech Republic, focused on creative, author-driven fiction and documentary films from Europe, Central Asia, and the Middle East.",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Prague",
+          "addressCountry": "CZ"
+        },
+        "sameAs": [],
+        "foundingDate": "2020",
+        "founders": [
+          {
+            "@type": "Person",
+            "name": "Iuliia Mamaeva"
+          }
+        ],
+        "areaServed": ["Europe", "Central Asia", "Middle East"],
+        "knowsAbout": ["Film Production", "Documentary Films", "Fiction Films", "Independent Cinema"]
+      }
+    </script>
   </head>
   <body>
     <Header />

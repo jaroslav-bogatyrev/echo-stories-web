@@ -82,9 +82,39 @@ if (sortedProjects.length > 1) {
   const nextIndex = currentIndex < sortedProjects.length - 1 ? currentIndex + 1 : 0;
   nextProject = sortedProjects[nextIndex];
 }
+
+// Create structured data for Movie
+const movieStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "Movie",
+  "name": project.data.title.en,
+  "alternateName": project.data.title.cz || undefined,
+  "description": project.data.logline?.en || synopsisEn.substring(0, 200),
+  "dateCreated": project.data.year.toString(),
+  "genre": project.data.category.join(', '),
+  "duration": project.data.duration || undefined,
+  "inLanguage": "en",
+  "productionCompany": {
+    "@type": "Organization",
+    "name": "Echo Stories"
+  },
+  "countryOfOrigin": {
+    "@type": "Country",
+    "name": "Czech Republic"
+  }
+};
+
+const pageDescription = project.data.logline?.en ||
+  `${project.data.title.en} - ${project.data.category.join(', ')} film by Echo Stories. ${synopsisEn.substring(0, 150)}...`;
 ---
 
-<Layout title={project.data.title.en}>
+<Layout
+  title={`${project.data.title.en} - Echo Stories Film Project`}
+  description={pageDescription}
+  type="article"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(movieStructuredData)} />
+
   <article class="mx-auto max-w-7xl px-4 py-12">
     <!-- Header -->
     <header class="mb-8">
