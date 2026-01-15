@@ -4,40 +4,36 @@ Welcome to the Echo Stories website documentation.
 
 ## 📚 Documentation Files
 
-### Quick Start Guides
-- **[READY_TO_DEPLOY.md](./READY_TO_DEPLOY.md)** - Complete deployment checklist and post-deployment steps
-- **[GOOGLE_SETUP_QUICKSTART.md](./GOOGLE_SETUP_QUICKSTART.md)** - Quick reference for setting up Google Analytics and Search Console
-
-### Detailed Setup Guides
-- **[SEO_AND_ANALYTICS_SETUP.md](./SEO_AND_ANALYTICS_SETUP.md)** - Comprehensive guide for SEO optimization and analytics
-- **[IMPLEMENTATION_COMPLETE.md](./IMPLEMENTATION_COMPLETE.md)** - Summary of what has been implemented
-
-### Content Management
+### Website Management
 - **[ADDING_PROJECTS.md](./ADDING_PROJECTS.md)** - How to add new film projects to the website
 - **[CUSTOM_DOMAIN_SETUP.md](./CUSTOM_DOMAIN_SETUP.md)** - Instructions for setting up a custom domain
 
-## 🚀 Getting Started
+### SEO & Analytics
+- **[SEO_GUIDE.md](./SEO_GUIDE.md)** - Complete SEO reference and best practices
 
-### For First-Time Deployment:
-1. Read [READY_TO_DEPLOY.md](./READY_TO_DEPLOY.md)
-2. Follow [GOOGLE_SETUP_QUICKSTART.md](./GOOGLE_SETUP_QUICKSTART.md)
+## 🚀 Quick Start
 
-### For Adding Content:
-1. Read [ADDING_PROJECTS.md](./ADDING_PROJECTS.md)
+### Adding New Projects
+See [ADDING_PROJECTS.md](./ADDING_PROJECTS.md)
 
-### For Domain Configuration:
-1. Read [CUSTOM_DOMAIN_SETUP.md](./CUSTOM_DOMAIN_SETUP.md)
+### Domain Configuration
+See [CUSTOM_DOMAIN_SETUP.md](./CUSTOM_DOMAIN_SETUP.md)
+
+### SEO & Search Visibility
+See [SEO_GUIDE.md](./SEO_GUIDE.md)
 
 ## 📊 Current Setup
 
-- **Google Analytics ID**: `G-0HTHGXJWJN`
 - **Domain**: `https://echo-stories.cz`
-- **Sitemap**: `https://echo-stories.cz/sitemap-index.xml`
+- **Google Analytics ID**: `G-0HTHGXJWJN`
 - **Hosting**: GitHub Pages
+- **Sitemap**: `https://echo-stories.cz/sitemap-index.xml`
 
 ## 🔗 Quick Links
 
 - [Google Analytics Dashboard](https://analytics.google.com/)
 - [Google Search Console](https://search.google.com/search-console/)
 - [Website](https://echo-stories.cz)
+
+
 
