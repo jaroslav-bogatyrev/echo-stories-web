@@ -36,6 +36,11 @@ const projectsCollection = defineCollection({
     })).optional(),
     tags: z.array(z.string()).optional(),
     support: z.array(z.string()).optional(),
+    pitching: z.array(z.object({
+      name: z.string(),
+      year: z.number().optional(),
+      award: z.string().optional(),
+    })).optional(),
     festivals: z.array(z.object({
       name: z.string(),
       year: z.number().optional(),

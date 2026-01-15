@@ -130,11 +130,40 @@ order: 0
 | `synopsis` | Object | Path to synopsis files | `en: "./synopsis-en.md"` |
 | `stills` | Array | Gallery images | See example above |
 | `video` | Object | Trailer/video | See providers below |
-| `festivals` | Array | Festival selections | See example above |
-| `links` | Object | Social media | `instagram`, `facebook`, `website` |
 | `support` | Array | Funding sources | List of organizations |
+| `pitching` | Array | Development events & pitching | See example below |
+| `festivals` | Array | Festival selections | See example below |
+| `links` | Object | Social media | `instagram`, `facebook`, `website` |
 | `tags` | Array | Keywords | `["drama", "family"]` |
 | `order` | Number | Display order | Lower numbers appear first |
+
+#### Development Events & Pitching
+
+Use `pitching` for development programs, pitching events, labs, and workshops:
+
+```yaml
+pitching:
+  - name: Berlinale - BIFA Pitching Event
+    year: 2026
+    award: Will be presented
+  - name: MIDPOINT Feature Launch
+    year: 2025
+    award: Selected
+```
+
+#### Festival Selections
+
+Use `festivals` for actual film festival selections and screenings:
+
+```yaml
+festivals:
+  - name: Cannes Film Festival
+    year: 2026
+    award: Official Selection - Short Film Competition
+  - name: Sundance Film Festival
+    year: 2026
+    award: Winner - Best Short Film
+```
 
 #### Video Providers
 

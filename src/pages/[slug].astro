@@ -192,6 +192,22 @@ const pageDescription = project.data.logline?.en ||
       </section>
     )}
 
+    <!-- Development & Pitching -->
+    {project.data.pitching && project.data.pitching.length > 0 && (
+      <section class="mb-12">
+        <h2 class="mb-4 font-serif text-2xl">Development & Pitching</h2>
+        <ul class="space-y-1 text-gray-700">
+          {project.data.pitching.map(event => (
+            <li>
+              <span>{event.name}</span>
+              {event.year && <span class="text-gray-500"> ({event.year})</span>}
+              {event.award && <span class="italic"> – {event.award}</span>}
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
     <!-- Official Selection -->
     {project.data.festivals && project.data.festivals.length > 0 && (
       <section class="mb-12">
