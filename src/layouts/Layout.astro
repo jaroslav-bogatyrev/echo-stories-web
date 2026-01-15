@@ -51,7 +51,11 @@ const imageURL = new URL(image, Astro.site);
     <meta name="googlebot" content="index, follow" />
     <meta name="author" content="Echo Stories" />
 
-    <link rel="icon" type="image/x-icon" href={`${base}/favicon.ico`.replace(/\/+/g, '/')} />
+    <!-- Favicon -->
+    <link rel="icon" href={`${base}/favicon.ico`.replace(/\/+/g, '/')} sizes="any" />
+    <link rel="icon" type="image/png" href={`${base}/favicon-32x32.png`.replace(/\/+/g, '/')} sizes="32x32" />
+    <link rel="icon" type="image/png" href={`${base}/favicon-16x16.png`.replace(/\/+/g, '/')} sizes="16x16" />
+    <link rel="manifest" href={`${base}/site.webmanifest`.replace(/\/+/g, '/')} />
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-0HTHGXJWJN"></script>
