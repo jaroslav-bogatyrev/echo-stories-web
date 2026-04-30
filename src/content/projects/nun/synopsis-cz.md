@@ -1,2 +1,1 @@
-V tichém, přísně synchronizovaném klášteře nově přijatá jeptiška nedokáže udržet rytmus. Po malé chybě se na jejím těle náhle objeví tajemné tetování. Když panikařím a snaží se ho skrýt, vše se jen zhoršuje. Klidné rutiny začínají unikat kontrole a odhalují, že sesterstvo se pohybuje ve vlastním rytmu.
-
+V tichém, přísně synchronizovaném klášteře nedokáže nově zasvěcená jeptiška držet rytmus. Po malé chybě se na jejím těle náhle objeví záhadné tetování. Ve snaze ho skrýt začne panikařit, ale situace se jen zhoršuje. Klidný řád se postupně narušuje a vychází najevo, že celé společenství se řídí vlastním rytmem.

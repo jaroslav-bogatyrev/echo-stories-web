@@ -44,11 +44,14 @@ if (project.data.synopsis) {
   }
 }
 
+// All project images (used for stills and laurels)
+const allProjectImages = import.meta.glob<{ default: ImageMetadata }>('/src/content/projects/**/*.{jpg,jpeg,png,svg,webp}', { eager: true });
+
 // Load still images dynamically
 const stills = project.data.stills ? await Promise.all(
   project.data.stills.map(async (still) => {
     try {
-      const images = import.meta.glob<{ default: ImageMetadata }>('/src/content/projects/**/*.{jpg,jpeg,png,svg}', { eager: true });
+      const images = allProjectImages;
       const imagePath = `/src/content/projects/${slug}/${still.src.replace('./', '')}`;
       const imageModule = images[imagePath];
       return {
@@ -60,6 +63,15 @@ const stills = project.data.stills ? await Promise.all(
     }
   })
 ).then(results => results.filter((r): r is { image: ImageMetadata; alt: string } => r !== null && r.image !== undefined)) : [];
+
+// Load laurel images for festivals
+const laurels = (project.data.festivals || [])
+  .filter(f => f.laurel)
+  .map(f => ({
+    name: f.name,
+    image: allProjectImages[`/src/content/projects/${slug}/${f.laurel!.replace('./', '')}`]?.default ?? null,
+  }))
+  .filter((l): l is { name: string; image: ImageMetadata } => l.image !== null);
 
 // Get all projects for navigation, excluding locked ones
 const allProjects = await getCollection('projects');
@@ -113,7 +125,7 @@ const pageDescription = project.data.logline?.en ||
   description={pageDescription}
   type="article"
 >
-  <script type="application/ld+json" set:html={JSON.stringify(movieStructuredData)} />
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(movieStructuredData)} />
 
   <article class="mx-auto max-w-7xl px-4 py-12">
     <!-- Header -->
@@ -127,11 +139,23 @@ const pageDescription = project.data.logline?.en ||
         <span>•</span>
         <span>{project.data.year}</span>
         {project.data.duration && (
-          <>
-            <span>•</span>
-            <span>{project.data.duration}</span>
-          </>
-        )}
+            <>
+              <span>•</span>
+              <span>{project.data.duration} / ep.</span>
+            </>
+          )}
+          {project.data.episodes && (
+            <>
+              <span>•</span>
+              <span>{project.data.episodes} ep.</span>
+            </>
+          )}
+          {project.data.seasons && (
+            <>
+              <span>•</span>
+              <span>{project.data.seasons} seasons</span>
+            </>
+          )}
         <span>•</span>
         <span class="capitalize">{project.data.status}</span>
       </div>
@@ -170,14 +194,35 @@ const pageDescription = project.data.logline?.en ||
     <!-- Credits -->
     <section class="mb-12">
       <h2 class="mb-4 font-serif text-2xl">Credits</h2>
-      <dl class="space-y-1 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-1">
-        {project.data.credits.map(credit => (
-          <div>
-            <dt class="inline font-medium">{credit.role}:</dt>
-            <dd class="inline ml-2">{credit.name}</dd>
+      {(() => {
+        const productionRoles = ['producer', 'co-producer', 'executive producer', 'associate producer'];
+        const team = project.data.credits.filter(c => !productionRoles.includes(c.role.toLowerCase()));
+        const production = project.data.credits.filter(c => productionRoles.includes(c.role.toLowerCase()));
+        return (
+          <div class="md:grid md:grid-cols-2 md:gap-x-12">
+            {team.length > 0 && (
+              <dl class="space-y-1 mb-6 md:mb-0">
+                {team.map(credit => (
+                  <div>
+                    <dt class="inline font-medium">{credit.role}:</dt>
+                    <dd class="inline ml-2 text-gray-700">{credit.name}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+            {production.length > 0 && (
+              <dl class="space-y-1 border-t border-gray-200 pt-4 md:border-t-0 md:pt-0 md:border-l md:border-gray-200 md:pl-12">
+                {production.map(credit => (
+                  <div>
+                    <dt class="inline font-medium">{credit.role}:</dt>
+                    <dd class="inline ml-2 text-gray-700">{credit.name}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
           </div>
-        ))}
-      </dl>
+        );
+      })()}
     </section>
 
     <!-- Support -->
@@ -212,15 +257,28 @@ const pageDescription = project.data.logline?.en ||
     {project.data.festivals && project.data.festivals.length > 0 && (
       <section class="mb-12">
         <h2 class="mb-4 font-serif text-2xl">Official Selection</h2>
-        <ul class="space-y-1 text-gray-700">
-          {project.data.festivals.map(festival => (
-            <li>
-              <span>{festival.name}</span>
-              {festival.year && <span class="text-gray-500"> ({festival.year})</span>}
-              {festival.award && <span class="italic"> – {festival.award}</span>}
-            </li>
-          ))}
-        </ul>
+        {laurels.length > 0 && (
+          <div class="flex flex-wrap gap-6 mb-6 items-end">
+            {laurels.map(l => (
+              <Image
+                src={l.image}
+                alt={`${l.name} laurel`}
+                class="h-32 w-auto object-contain"
+              />
+            ))}
+          </div>
+        )}
+        {project.data.festivals.filter(f => !f.laurel).length > 0 && (
+          <ul class="space-y-1 text-gray-700">
+            {project.data.festivals.filter(f => !f.laurel).map(festival => (
+              <li>
+                <span>{festival.name}</span>
+                {festival.year && <span class="text-gray-500"> ({festival.year})</span>}
+                {festival.award && <span class="italic"> – {festival.award}</span>}
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
     )}
 
@@ -288,7 +346,7 @@ const pageDescription = project.data.logline?.en ||
         {project.data.video.provider === 'vimeo' && project.data.video.id && (
           <div class="aspect-video">
             <iframe
-              src={`https://player.vimeo.com/video/${project.data.video.id}`}
+              src={`https://player.vimeo.com/video/${project.data.video.id}${project.data.video.hash ? `?h=${project.data.video.hash}` : ''}`}
               width="100%"
               height="100%"
               allow="autoplay; fullscreen; picture-in-picture"

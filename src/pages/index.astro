@@ -6,7 +6,6 @@ import Layout from '@/layouts/Layout.astro';
 const projects = await getCollection('projects');
 const base = import.meta.env.BASE_URL;
 
-// Load images dynamically
 const images = import.meta.glob<{ default: ImageMetadata }>('/src/content/projects/**/*.{jpg,jpeg,png,svg}', { eager: true });
 
 const projectsWithImages = await Promise.all(
@@ -14,20 +13,24 @@ const projectsWithImages = await Promise.all(
     const slug = project.id.replace('/index', '');
     const imagePath = `/src/content/projects/${slug}/${project.data.image.replace('./', '')}`;
     const imageModule = images[imagePath];
-    return {
-      ...project,
-      imageModule: imageModule?.default
-    };
+    return { ...project, imageModule: imageModule?.default, slug };
   })
 );
 
 const sortedProjects = projectsWithImages.sort((a, b) => {
-  // Sort by order if available, otherwise by year descending
-  if (a.data.order !== undefined && b.data.order !== undefined) {
-    return a.data.order - b.data.order;
-  }
+  if (a.data.order !== undefined && b.data.order !== undefined) return a.data.order - b.data.order;
   return b.data.year - a.data.year;
 });
+
+const [hero, ...rest] = sortedProjects;
+
+const statusConfig: Record<string, { label: string; classes: string }> = {
+  'completed':        { label: 'Completed',         classes: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' },
+  'released':         { label: 'Released',           classes: 'bg-blue-500/20 text-blue-300 border border-blue-500/30' },
+  'in postproduction':{ label: 'Post-production',    classes: 'bg-amber-500/20 text-amber-300 border border-amber-500/30' },
+  'preproduction':    { label: 'Pre-production',     classes: 'bg-violet-500/20 text-violet-300 border border-violet-500/30' },
+  'in development':   { label: 'In Development',     classes: 'bg-slate-500/20 text-slate-300 border border-slate-500/30' },
+};
 ---
 
 <Layout
@@ -35,91 +38,115 @@ const sortedProjects = projectsWithImages.sort((a, b) => {
   description="Echo Stories is a Prague-based independent film production company focused on creative, author-driven fiction and documentary films from Europe, Central Asia, and the Middle East."
 >
   <div class="mx-auto max-w-7xl px-4 py-12">
-    <div class="grid gap-8 md:grid-cols-2">
-      {sortedProjects.map(project => {
-        const isLocked = project.data.locked === true;
 
-        return isLocked ? (
-          <div class="group relative aspect-video overflow-hidden bg-gray-100 cursor-not-allowed opacity-75">
-            {project.imageModule && (
-              <Image
-                src={project.imageModule}
-                alt={project.data.title.en}
-                class="h-full w-full object-cover transition-transform duration-300 blur-sm"
-                widths={[400, 800, 1200]}
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-            )}
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-            <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
-              <h2 class="mb-2 font-serif text-2xl md:text-3xl">
-                {project.data.title.en}
-                {project.data.title.cz && <span class="italic"> \ {project.data.title.cz}</span>}
-              </h2>
-              <div class="mb-2 flex flex-wrap gap-2 text-sm opacity-90">
-                <span class="capitalize">{project.data.category.join(', ')}</span>
-                <span>•</span>
-                <span>{project.data.year}</span>
-                {project.data.duration && (
-                  <>
-                    <span>•</span>
-                    <span>{project.data.duration}</span>
-                  </>
-                )}
-              </div>
-              {project.data.logline && (
-                <p class="line-clamp-2 text-sm opacity-80">
-                  {project.data.logline.en}
-                </p>
-              )}
-              <div class="mt-2 flex items-center gap-2 text-xs opacity-70">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <!-- Hero Project -->
+    {hero && (() => {
+      const isLocked = hero.data.locked === true;
+      const status = statusConfig[hero.data.status] ?? { label: hero.data.status, classes: 'bg-slate-500/20 text-slate-300 border border-slate-500/30' };
+      const inner = (
+        <div class="relative w-full overflow-hidden bg-gray-900" style="aspect-ratio: 21/9;">
+          {hero.imageModule && (
+            <Image
+              src={hero.imageModule}
+              alt={hero.data.title.en}
+              class={`h-full w-full object-cover transition-transform duration-700 ${isLocked ? 'blur-sm scale-105' : 'group-hover:scale-105'}`}
+              widths={[800, 1200, 1920]}
+              sizes="100vw"
+            />
+          )}
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+          {isLocked && (
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="flex items-center gap-2 text-white/60 text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
-                <span>Project details coming soon</span>
+                Coming soon
               </div>
             </div>
-          </div>
-        ) : (
-          <a
-            href={`${base}/${project.id.replace('/index', '')}`.replace(/\/+/g, '/')}
-            class="group relative aspect-video overflow-hidden bg-gray-100"
-          >
-            {project.imageModule && (
-              <Image
-                src={project.imageModule}
-                alt={project.data.title.en}
-                class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                widths={[400, 800, 1200]}
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-            )}
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-            <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
-              <h2 class="mb-2 font-serif text-2xl md:text-3xl">
-                {project.data.title.en}
-                {project.data.title.cz && <span class="italic"> \ {project.data.title.cz}</span>}
-              </h2>
-              <div class="mb-2 flex flex-wrap gap-2 text-sm opacity-90">
-                <span class="capitalize">{project.data.category.join(', ')}</span>
-                <span>•</span>
-                <span>{project.data.year}</span>
-                {project.data.duration && (
-                  <>
-                    <span>•</span>
-                    <span>{project.data.duration}</span>
-                  </>
-                )}
-              </div>
-              {project.data.logline && (
-                <p class="line-clamp-2 text-sm opacity-80">
-                  {project.data.logline.en}
-                </p>
+          )}
+          <div class="absolute bottom-0 left-0 right-0 p-6 md:p-10">
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+              <span class={`text-xs font-medium px-2.5 py-1 rounded-full ${status.classes}`}>{status.label}</span>
+              {hero.data.festivals && hero.data.festivals.length > 0 && (
+                <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-white/10 text-white/70 border border-white/20">
+                  {hero.data.festivals.length} Festival{hero.data.festivals.length > 1 ? 's' : ''}
+                </span>
               )}
             </div>
-          </a>
-        );
-      })}
-    </div>
+            <h2 class="mb-2 font-serif text-3xl md:text-5xl text-white leading-tight">
+              {hero.data.title.en}
+              {hero.data.title.cz && <span class="italic text-white/70"> \ {hero.data.title.cz}</span>}
+            </h2>
+            <div class="flex flex-wrap gap-3 text-sm text-white/60 mb-3">
+              <span class="capitalize">{hero.data.category.join(', ')}</span>
+              <span>•</span>
+              <span>{hero.data.year}</span>
+              {hero.data.duration && <><span>•</span><span>{hero.data.duration}</span></>}
+            </div>
+            {hero.data.logline && (
+              <p class="text-white/80 text-base md:text-lg max-w-2xl">{hero.data.logline.en}</p>
+            )}
+          </div>
+        </div>
+      );
+      return isLocked
+        ? <div class="mb-10 cursor-not-allowed opacity-80">{inner}</div>
+        : <a href={`${base}/${hero.slug}`.replace(/\/+/g, '/')} class="group block mb-10">{inner}</a>;
+    })()}
+
+    <!-- Remaining Projects Grid -->
+    {rest.length > 0 && (
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {rest.map(project => {
+          const isLocked = project.data.locked === true;
+          const status = statusConfig[project.data.status] ?? { label: project.data.status, classes: 'bg-slate-500/20 text-slate-300 border border-slate-500/30' };
+          const inner = (
+            <div class="relative aspect-video w-full overflow-hidden bg-gray-900">
+              {project.imageModule && (
+                <Image
+                  src={project.imageModule}
+                  alt={project.data.title.en}
+                  class={`h-full w-full object-cover transition-transform duration-500 ${isLocked ? 'blur-sm scale-105' : 'group-hover:scale-105'}`}
+                  widths={[400, 800]}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
+              )}
+              <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+              {isLocked && (
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <div class="flex items-center gap-2 text-white/50 text-xs">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    Coming soon
+                  </div>
+                </div>
+              )}
+              <div class="absolute bottom-0 left-0 right-0 p-4 md:p-5">
+                <span class={`inline-block text-xs font-medium px-2 py-0.5 rounded-full mb-2 ${status.classes}`}>{status.label}</span>
+                <h2 class="font-serif text-lg md:text-xl text-white leading-snug">
+                  {project.data.title.en}
+                  {project.data.title.cz && <span class="italic text-white/60"> \ {project.data.title.cz}</span>}
+                </h2>
+                <div class="flex flex-wrap gap-2 text-xs text-white/55 mt-1">
+                  <span class="capitalize">{project.data.category.join(', ')}</span>
+                  <span>•</span>
+                  <span>{project.data.year}</span>
+                  {project.data.duration && <><span>•</span><span>{project.data.duration}</span></>}
+                </div>
+                {project.data.logline && (
+                  <p class="mt-2 text-white/70 text-xs line-clamp-2">{project.data.logline.en}</p>
+                )}
+              </div>
+            </div>
+          );
+          return isLocked
+            ? <div class="cursor-not-allowed opacity-80">{inner}</div>
+            : <a href={`${base}/${project.slug}`.replace(/\/+/g, '/')} class="group block">{inner}</a>;
+        })}
+      </div>
+    )}
+
   </div>
 </Layout>
