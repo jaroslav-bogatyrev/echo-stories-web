@@ -207,29 +207,30 @@ const pageDescription = project.data.logline?.en ||
     <!-- Credits / Support / Pitching / Selection -->
     {(() => {
       const productionRoles = ['producer', 'co-producer', 'executive producer', 'associate producer'];
-      const team = project.data.credits.filter(c => !productionRoles.includes(c.role.toLowerCase()));
-      const production = project.data.credits.filter(c => productionRoles.includes(c.role.toLowerCase()));
+      const allCredits = project.data.credits;
+      const half = Math.ceil(allCredits.length / 2);
+      const leftCredits = allCredits.slice(0, half);
+      const rightCredits = allCredits.slice(half);
+
+      const renderCreditItem = (credit: any, i: number, list: any[]) => {
+        const isProduction = productionRoles.includes(credit.role.toLowerCase());
+        const prevIsNonProduction = i > 0 && !productionRoles.includes(list[i - 1].role.toLowerCase());
+        return (
+          <div class={isProduction && prevIsNonProduction ? 'mt-5' : ''}>
+            <dt class="inline font-medium">{credit.role}:</dt>
+            <dd class="inline ml-2 text-gray-700">{credit.name}</dd>
+          </div>
+        );
+      };
 
       const creditsDl = (
         <div class="md:grid md:grid-cols-2">
-          {team.length > 0 && (
-            <dl class="space-y-1 mb-6 md:mb-0 md:pr-8">
-              {team.map(credit => (
-                <div>
-                  <dt class="inline font-medium">{credit.role}:</dt>
-                  <dd class="inline ml-2 text-gray-700">{credit.name}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
-          {production.length > 0 && (
+          <dl class="space-y-1 mb-6 md:mb-0 md:pr-8">
+            {leftCredits.map((credit, i) => renderCreditItem(credit, i, leftCredits))}
+          </dl>
+          {rightCredits.length > 0 && (
             <dl class="space-y-1 border-t border-gray-200 pt-4 md:border-t-0 md:pt-0 md:border-l md:border-gray-200 md:pl-8">
-              {production.map(credit => (
-                <div>
-                  <dt class="inline font-medium">{credit.role}:</dt>
-                  <dd class="inline ml-2 text-gray-700">{credit.name}</dd>
-                </div>
-              ))}
+              {rightCredits.map((credit, i) => renderCreditItem(credit, i, rightCredits))}
             </dl>
           )}
         </div>
