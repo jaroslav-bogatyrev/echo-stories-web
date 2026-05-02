@@ -36,6 +36,7 @@ const projectsCollection = defineCollection({
     stills: z.array(z.object({
       src: z.string(),
       alt: z.string(),
+      caption: z.string().optional(),
     })).optional(),
     tags: z.array(z.string()).optional(),
     support: z.array(z.string()).optional(),

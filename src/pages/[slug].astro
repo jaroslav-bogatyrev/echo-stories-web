@@ -51,18 +51,19 @@ const allProjectImages = import.meta.glob<{ default: ImageMetadata }>('/src/cont
 const stills = project.data.stills ? await Promise.all(
   project.data.stills.map(async (still) => {
     try {
-      const images = allProjectImages;
-      const imagePath = `/src/content/projects/${slug}/${still.src.replace('./', '')}`;
-      const imageModule = images[imagePath];
-      return {
-        image: imageModule?.default,
-        alt: still.alt
-      };
+        const images = allProjectImages;
+        const imagePath = `/src/content/projects/${slug}/${still.src.replace('./', '')}`;
+        const imageModule = images[imagePath];
+        return {
+          image: imageModule?.default,
+          alt: still.alt,
+          caption: still.caption,
+        };
     } catch (e) {
       return null;
     }
   })
-).then(results => results.filter((r): r is { image: ImageMetadata; alt: string } => r !== null && r.image !== undefined)) : [];
+).then(results => results.filter((r): r is { image: ImageMetadata; alt: string; caption?: string } => r !== null && r.image !== undefined)) : [];
 
 // Load laurel images for festivals
 const laurels = (project.data.festivals || [])
@@ -371,7 +372,7 @@ const pageDescription = project.data.logline?.en ||
             <button
               type="button"
               data-gallery-index={index}
-              class="aspect-video w-full overflow-hidden md:cursor-pointer group"
+              class="relative aspect-video w-full overflow-hidden md:cursor-pointer group"
             >
               <Image
                 src={still.image}
@@ -380,6 +381,11 @@ const pageDescription = project.data.logline?.en ||
                 widths={[400, 600, 800]}
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
+              {still.caption && (
+                <div class="absolute bottom-0 left-0 right-0 px-3 py-2">
+                  <p class="text-white/90 text-xs leading-snug bg-black/50 backdrop-blur-sm rounded px-2 py-1 inline-block">{still.caption}</p>
+                </div>
+              )}
             </button>
           ))}
         </div>
@@ -423,6 +429,10 @@ const pageDescription = project.data.logline?.en ||
       
       <div id="gallery-counter" class="absolute bottom-4 left-1/2 -translate-x-1/2 text-white text-lg">
       </div>
+
+      <div id="gallery-caption" class="absolute bottom-12 left-0 right-0 px-16 text-center hidden">
+        <span class="inline-block bg-black/50 text-white/90 text-sm px-3 py-1.5 rounded backdrop-blur-sm"></span>
+      </div>
     </div>
 
     <script is:inline define:vars={{ stills }}>
@@ -430,6 +440,7 @@ const pageDescription = project.data.logline?.en ||
       const modal = document.getElementById('gallery-modal');
       const galleryImage = document.getElementById('gallery-image');
       const galleryCounter = document.getElementById('gallery-counter');
+      const galleryCaption = document.getElementById('gallery-caption');
       const closeBtn = document.getElementById('close-gallery');
       const prevBtn = document.getElementById('prev-image');
       const nextBtn = document.getElementById('next-image');
@@ -447,6 +458,13 @@ const pageDescription = project.data.logline?.en ||
           galleryImage.src = still.image.src;
           galleryImage.alt = still.alt || '';
           galleryCounter.textContent = `${currentIndex + 1} / ${stills.length}`;
+          if (still.caption) {
+            galleryCaption.querySelector('span').textContent = still.caption;
+            galleryCaption.classList.remove('hidden');
+          } else {
+            galleryCaption.querySelector('span').textContent = '';
+            galleryCaption.classList.add('hidden');
+          }
         }
       }
       
