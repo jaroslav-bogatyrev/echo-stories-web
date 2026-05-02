@@ -22,6 +22,7 @@ const projectsCollection = defineCollection({
     category: z.array(z.enum(['short', 'feature', 'documentary', 'experimental', 'animation', 'series', 'mockumentary', 'Drama', 'Folk Horror'])),
     status: z.enum(['in development', 'preproduction', 'in postproduction', 'completed', 'released']),
     image: z.string(),
+    poster: z.string().optional(),
     credits: z.array(z.object({
       role: z.string(),
       name: z.string(),
@@ -50,6 +51,7 @@ const projectsCollection = defineCollection({
       year: z.number().optional(),
       award: z.string().optional(),
       laurel: z.string().optional(),
+      url: z.string().optional(),
     })).optional(),
     synopsis: z.object({
       en: z.string().optional(),

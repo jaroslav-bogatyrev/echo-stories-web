@@ -74,6 +74,11 @@ const laurels = (project.data.festivals || [])
   }))
   .filter((l): l is { name: string; image: ImageMetadata } => l.image !== null);
 
+// Load poster if defined
+const posterImage = project.data.poster
+  ? allProjectImages[`/src/content/projects/${slug}/${project.data.poster.replace('./', '')}`]?.default ?? null
+  : null;
+
 // Get all projects for navigation, excluding locked ones
 const allProjects = await getCollection('projects');
 const sortedProjects = allProjects
@@ -129,163 +134,230 @@ const pageDescription = project.data.logline?.en ||
   <script is:inline type="application/ld+json" set:html={JSON.stringify(movieStructuredData)} />
 
   <article class="mx-auto max-w-7xl px-4 py-12">
-    <!-- Header -->
-    <header class="mb-8">
-      <h1 class="mb-2 font-serif text-4xl md:text-5xl">
-        {project.data.title.en}
-        {project.data.title.cz && <span class="italic"> \ {project.data.title.cz}</span>}
-      </h1>
-      <div class="flex flex-wrap gap-4 text-sm text-gray-600">
-        <span class="capitalize">{project.data.category.join(', ')}</span>
-        <span>•</span>
-        <span>{project.data.year}</span>
-        {project.data.duration && (
-            <>
-              <span>•</span>
-              <span>{project.data.duration} / ep.</span>
-            </>
-          )}
-          {project.data.episodes && (
-            <>
-              <span>•</span>
-              <span>{project.data.episodes} ep.</span>
-            </>
-          )}
-          {project.data.seasons && (
-            <>
-              <span>•</span>
-              <span>{project.data.seasons} seasons</span>
-            </>
-          )}
-        <span>•</span>
-        <span class="capitalize">{project.data.status}</span>
-      </div>
-    </header>
+    <!-- Title -->
+    <h1 class="mb-8 font-serif text-4xl md:text-5xl">
+      {project.data.title.en}
+      {project.data.title.cz && <span class="italic"> \ {project.data.title.cz}</span>}
+    </h1>
 
-    <!-- Logline -->
+    <!-- Category meta + Logline: always above the grid -->
+    <p class="text-sm text-gray-500 mb-3">
+      <span class="capitalize font-medium text-gray-700">{project.data.category.join(', ')}</span>
+      <span class="mx-3">•</span>
+      <span>{project.data.year}</span>
+      {project.data.duration && <><span class="mx-3">•</span><span>{project.data.duration}{project.data.category.includes('series') ? ' / ep.' : ''}</span></>}
+      {project.data.category.includes('series') && project.data.episodes && <><span class="mx-3">•</span><span>{project.data.episodes} ep.</span></>}
+      {project.data.category.includes('series') && project.data.seasons && <><span class="mx-3">•</span><span>{project.data.seasons} seasons</span></>}
+      <span class="mx-3">•</span>
+      <span class="capitalize">{project.data.status}</span>
+    </p>
     {project.data.logline && (
-      <p class="mb-8 text-lg text-gray-700">
+      <p class="text-lg text-gray-700 mb-10">
         {project.data.logline.en}
         {project.data.logline.cz && <span class="italic"> \ {project.data.logline.cz}</span>}
       </p>
     )}
 
-    <!-- Synopsis (MDX Content) -->
-    <section class="mb-12">
-      <div class="prose prose-lg max-w-none md:grid md:grid-cols-2 md:gap-8">
+    {posterImage ? (
+      <!-- WITH poster: 2-col grid for poster + synopsis -->
+      <div class="md:grid md:grid-cols-[180px_1fr] md:gap-x-12 md:items-start mb-12">
+        <div class="mb-6 md:mb-0">
+          <button type="button" id="poster-btn" class="hidden md:block group cursor-zoom-in w-full" aria-label="View poster full size">
+            <Image src={posterImage} alt={`${project.data.title.en} poster`} class="w-full rounded shadow-lg transition-transform duration-300 group-hover:scale-105" />
+          </button>
+        </div>
+        <div>
+          <button type="button" id="poster-btn-mobile" class="block group cursor-zoom-in mb-8 md:hidden" aria-label="View poster full size">
+            <Image src={posterImage} alt={`${project.data.title.en} poster`} class="w-32 rounded shadow-lg transition-transform duration-300 group-hover:scale-105" />
+          </button>
+          <div class="prose prose-lg max-w-none md:grid md:grid-cols-2">
+            {synopsisEn && (
+              <div class="mb-6 md:mb-0 md:pr-8">
+                <div class="mb-4"><span class="inline-flex items-center px-3 py-1 text-sm font-semibold bg-gray-900 text-white rounded-md">EN</span></div>
+                <div class="whitespace-pre-wrap">{synopsisEn}</div>
+              </div>
+            )}
+            {synopsisCz && (
+              <div class="md:border-l md:border-gray-200 md:pl-8">
+                <div class="mb-4"><span class="inline-flex items-center px-3 py-1 text-sm font-semibold bg-gray-900 text-white rounded-md">CZ</span></div>
+                <div class="whitespace-pre-wrap">{synopsisCz}</div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    ) : (
+      <!-- WITHOUT poster: synopsis spans full width -->
+      <div class="prose prose-lg max-w-none mb-12 md:grid md:grid-cols-2">
         {synopsisEn && (
-          <div class="mb-6 md:mb-0">
-            <div class="mb-4">
-              <span class="inline-flex items-center px-3 py-1 text-sm font-semibold bg-gray-900 text-white rounded-md">EN</span>
-            </div>
+          <div class="mb-6 md:mb-0 md:pr-8">
+            <div class="mb-4"><span class="inline-flex items-center px-3 py-1 text-sm font-semibold bg-gray-900 text-white rounded-md">EN</span></div>
             <div class="whitespace-pre-wrap">{synopsisEn}</div>
           </div>
         )}
         {synopsisCz && (
-          <div>
-            <div class="mb-4">
-              <span class="inline-flex items-center px-3 py-1 text-sm font-semibold bg-gray-900 text-white rounded-md">CZ</span>
-            </div>
+          <div class="md:border-l md:border-gray-200 md:pl-8">
+            <div class="mb-4"><span class="inline-flex items-center px-3 py-1 text-sm font-semibold bg-gray-900 text-white rounded-md">CZ</span></div>
             <div class="whitespace-pre-wrap">{synopsisCz}</div>
           </div>
         )}
       </div>
-    </section>
+    )}
 
-    <!-- Credits -->
-    <section class="mb-12">
-      <h2 class="mb-4 font-serif text-2xl">Credits</h2>
-      {(() => {
-        const productionRoles = ['producer', 'co-producer', 'executive producer', 'associate producer'];
-        const team = project.data.credits.filter(c => !productionRoles.includes(c.role.toLowerCase()));
-        const production = project.data.credits.filter(c => productionRoles.includes(c.role.toLowerCase()));
+    <!-- Credits / Support / Pitching / Selection -->
+    {(() => {
+      const productionRoles = ['producer', 'co-producer', 'executive producer', 'associate producer'];
+      const team = project.data.credits.filter(c => !productionRoles.includes(c.role.toLowerCase()));
+      const production = project.data.credits.filter(c => productionRoles.includes(c.role.toLowerCase()));
+
+      const creditsDl = (
+        <div class="md:grid md:grid-cols-2">
+          {team.length > 0 && (
+            <dl class="space-y-1 mb-6 md:mb-0 md:pr-8">
+              {team.map(credit => (
+                <div>
+                  <dt class="inline font-medium">{credit.role}:</dt>
+                  <dd class="inline ml-2 text-gray-700">{credit.name}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+          {production.length > 0 && (
+            <dl class="space-y-1 border-t border-gray-200 pt-4 md:border-t-0 md:pt-0 md:border-l md:border-gray-200 md:pl-8">
+              {production.map(credit => (
+                <div>
+                  <dt class="inline font-medium">{credit.role}:</dt>
+                  <dd class="inline ml-2 text-gray-700">{credit.name}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+        </div>
+      );
+
+      if (posterImage) {
+        // WITH poster: [180px | 1fr] label+content grid
         return (
-          <div class="md:grid md:grid-cols-2 md:gap-x-12">
-            {team.length > 0 && (
-              <dl class="space-y-1 mb-6 md:mb-0">
-                {team.map(credit => (
-                  <div>
-                    <dt class="inline font-medium">{credit.role}:</dt>
-                    <dd class="inline ml-2 text-gray-700">{credit.name}</dd>
-                  </div>
-                ))}
-              </dl>
+          <div class="md:grid md:grid-cols-[180px_1fr] md:gap-x-12 md:gap-y-10 md:items-start mb-12">
+            <div class="mb-2 md:mb-0"><h2 class="font-serif text-2xl leading-none">Credits</h2></div>
+            <div>{creditsDl}</div>
+
+            {project.data.support && project.data.support.length > 0 && (
+              <>
+                <div class="mt-8 mb-2 md:mt-0 md:mb-0"><h2 class="font-serif text-2xl leading-none">Support</h2></div>
+                <ul class="list-disc list-inside space-y-1 text-gray-700">
+                  {project.data.support.map(org => <li>{org}</li>)}
+                </ul>
+              </>
             )}
-            {production.length > 0 && (
-              <dl class="space-y-1 border-t border-gray-200 pt-4 md:border-t-0 md:pt-0 md:border-l md:border-gray-200 md:pl-12">
-                {production.map(credit => (
-                  <div>
-                    <dt class="inline font-medium">{credit.role}:</dt>
-                    <dd class="inline ml-2 text-gray-700">{credit.name}</dd>
-                  </div>
-                ))}
-              </dl>
+            {project.data.pitching && project.data.pitching.length > 0 && (
+              <>
+                <div class="mt-8 mb-2 md:mt-0 md:mb-0"><h2 class="font-serif text-2xl leading-none">Development & Pitching</h2></div>
+                <ul class="space-y-1 text-gray-700">
+                  {project.data.pitching.map(event => (
+                    <li>
+                      <span>{event.name}</span>
+                      {event.year && <span class="text-gray-500"> ({event.year})</span>}
+                      {event.award && <span class="italic"> – {event.award}</span>}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+            {project.data.festivals && project.data.festivals.length > 0 && (
+              <>
+                <div class="mt-8 mb-2 md:mt-0 md:mb-0"><h2 class="font-serif text-2xl leading-none">Official Selection</h2></div>
+                <div>
+                  {laurels.length > 0 && (
+                    <div class="flex flex-wrap gap-6 mb-6 items-end">
+                      {laurels.map(l => (
+                        <Image src={l.image} alt={`${l.name} laurel`} class="h-auto w-44 object-contain" />
+                      ))}
+                    </div>
+                  )}
+                  {project.data.festivals.filter(f => !f.laurel).length > 0 && (
+                    <ul class="space-y-1 text-gray-700">
+                      {project.data.festivals.filter(f => !f.laurel).map(festival => (
+                        <li>
+                          {festival.url
+                            ? <a href={festival.url} target="_blank" rel="noopener noreferrer" class="underline hover:text-gray-900">{festival.name}</a>
+                            : <span>{festival.name}</span>
+                          }
+                          {festival.year && <span class="text-gray-500"> ({festival.year})</span>}
+                          {festival.award && <span class="italic"> – {festival.award}</span>}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </>
             )}
           </div>
         );
-      })()}
-    </section>
-
-    <!-- Support -->
-    {project.data.support && project.data.support.length > 0 && (
-      <section class="mb-12">
-        <h2 class="mb-4 font-serif text-2xl">Support</h2>
-        <ul class="list-disc list-inside space-y-1 text-gray-700">
-          {project.data.support.map(org => (
-            <li>{org}</li>
-          ))}
-        </ul>
-      </section>
-    )}
-
-    <!-- Development & Pitching -->
-    {project.data.pitching && project.data.pitching.length > 0 && (
-      <section class="mb-12">
-        <h2 class="mb-4 font-serif text-2xl">Development & Pitching</h2>
-        <ul class="space-y-1 text-gray-700">
-          {project.data.pitching.map(event => (
-            <li>
-              <span>{event.name}</span>
-              {event.year && <span class="text-gray-500"> ({event.year})</span>}
-              {event.award && <span class="italic"> – {event.award}</span>}
-            </li>
-          ))}
-        </ul>
-      </section>
-    )}
-
-    <!-- Official Selection -->
-    {project.data.festivals && project.data.festivals.length > 0 && (
-      <section class="mb-12">
-        <h2 class="mb-4 font-serif text-2xl">Official Selection</h2>
-        {laurels.length > 0 && (
-          <div class="flex flex-wrap gap-6 mb-6 items-end">
-            {laurels.map(l => (
-              <Image
-                src={l.image}
-                alt={`${l.name} laurel`}
-                class="h-32 w-auto object-contain"
-              />
-            ))}
+      } else {
+        // WITHOUT poster: full-width layout, divider aligns with synopsis
+        return (
+          <div class="mb-12 space-y-10">
+            <div>
+              <h2 class="font-serif text-2xl leading-none mb-4">Credits</h2>
+              {creditsDl}
+            </div>
+            {project.data.support && project.data.support.length > 0 && (
+              <div>
+                <h2 class="font-serif text-2xl leading-none mb-4">Support</h2>
+                <ul class="list-disc list-inside space-y-1 text-gray-700">
+                  {project.data.support.map(org => <li>{org}</li>)}
+                </ul>
+              </div>
+            )}
+            {project.data.pitching && project.data.pitching.length > 0 && (
+              <div>
+                <h2 class="font-serif text-2xl leading-none mb-4">Development & Pitching</h2>
+                <ul class="space-y-1 text-gray-700">
+                  {project.data.pitching.map(event => (
+                    <li>
+                      <span>{event.name}</span>
+                      {event.year && <span class="text-gray-500"> ({event.year})</span>}
+                      {event.award && <span class="italic"> – {event.award}</span>}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {project.data.festivals && project.data.festivals.length > 0 && (
+              <div>
+                <h2 class="font-serif text-2xl leading-none mb-4">Official Selection</h2>
+                {laurels.length > 0 && (
+                  <div class="flex flex-wrap gap-6 mb-6 items-end">
+                    {laurels.map(l => (
+                      <Image src={l.image} alt={`${l.name} laurel`} class="h-auto w-44 object-contain" />
+                    ))}
+                  </div>
+                )}
+                {project.data.festivals.filter(f => !f.laurel).length > 0 && (
+                  <ul class="space-y-1 text-gray-700">
+                    {project.data.festivals.filter(f => !f.laurel).map(festival => (
+                      <li>
+                        {festival.url
+                          ? <a href={festival.url} target="_blank" rel="noopener noreferrer" class="underline hover:text-gray-900">{festival.name}</a>
+                          : <span>{festival.name}</span>
+                        }
+                        {festival.year && <span class="text-gray-500"> ({festival.year})</span>}
+                        {festival.award && <span class="italic"> – {festival.award}</span>}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
           </div>
-        )}
-        {project.data.festivals.filter(f => !f.laurel).length > 0 && (
-          <ul class="space-y-1 text-gray-700">
-            {project.data.festivals.filter(f => !f.laurel).map(festival => (
-              <li>
-                <span>{festival.name}</span>
-                {festival.year && <span class="text-gray-500"> ({festival.year})</span>}
-                {festival.award && <span class="italic"> – {festival.award}</span>}
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-    )}
+        );
+      }
+    })()}
 
     <!-- Links -->
     {project.data.links && (project.data.links.instagram || project.data.links.facebook || project.data.links.website) && (
-      <section class="mb-12">
+      <section class="mb-12 border-t border-gray-200 pt-12">
         <h2 class="mb-4 font-serif text-2xl">Links</h2>
         <div class="flex items-center gap-4">
           {project.data.links.instagram && (
@@ -293,12 +365,13 @@ const pageDescription = project.data.logline?.en ||
               href={project.data.links.instagram}
               target="_blank"
               rel="noopener noreferrer"
-              class="text-gray-700 hover:text-gray-900 transition-colors"
+              class="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-colors"
               aria-label="Instagram"
             >
-              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <svg class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
               </svg>
+              <span class="text-base font-medium">@{project.data.links.instagram.match(/instagram\.com\/([^?/]+)/)?.[1] ?? ''}</span>
             </a>
           )}
           {project.data.links.facebook && (
@@ -330,7 +403,7 @@ const pageDescription = project.data.logline?.en ||
 
     <!-- Video -->
     {project.data.video && (
-      <div class="mb-12">
+      <div class="mb-12 border-t border-gray-200 pt-12">
         {project.data.video.provider === 'youtube' && project.data.video.id && (
           <div class="aspect-video">
             <iframe
@@ -366,28 +439,32 @@ const pageDescription = project.data.logline?.en ||
 
     <!-- Stills Gallery -->
     {stills && stills.length > 0 && (
-      <section class="mb-12">
+      <section class="mb-12 border-t border-gray-200 pt-12">
         <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {stills.map((still, index) => (
-            <button
-              type="button"
-              data-gallery-index={index}
-              class="relative aspect-video w-full overflow-hidden md:cursor-pointer group"
-            >
-              <Image
-                src={still.image}
-                alt={still.alt}
-                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                widths={[400, 600, 800]}
-                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              />
-              {still.caption && (
-                <div class="absolute bottom-0 left-0 right-0 px-3 py-2">
-                  <p class="text-white/90 text-xs leading-snug bg-black/50 backdrop-blur-sm rounded px-2 py-1 inline-block">{still.caption}</p>
-                </div>
-              )}
-            </button>
-          ))}
+          {stills.map((still, index) => {
+            const isPortrait = still.image && still.image.height > still.image.width;
+            return (
+              <button
+                type="button"
+                data-gallery-index={index}
+                class="relative w-full overflow-hidden md:cursor-pointer group"
+                style={`aspect-ratio: ${isPortrait ? '2/3' : '16/9'}`}
+              >
+                <Image
+                  src={still.image}
+                  alt={still.alt}
+                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  widths={[400, 600, 800]}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
+                {still.caption && (
+                  <div class="absolute bottom-0 left-0 right-0 px-3 py-2">
+                    <p class="text-white/90 text-xs leading-snug bg-black/50 backdrop-blur-sm rounded px-2 py-1 inline-block">{still.caption}</p>
+                  </div>
+                )}
+              </button>
+            );
+          })}
         </div>
       </section>
     )}
@@ -445,7 +522,7 @@ const pageDescription = project.data.logline?.en ||
       const prevBtn = document.getElementById('prev-image');
       const nextBtn = document.getElementById('next-image');
       const galleryButtons = document.querySelectorAll('[data-gallery-index]');
-      
+
       let currentIndex = 0;
       
       function showImage(index) {
@@ -478,7 +555,24 @@ const pageDescription = project.data.logline?.en ||
           showImage(index);
         });
       });
-      
+
+      const posterBtn = document.getElementById('poster-btn');
+      const posterBtnMobile = document.getElementById('poster-btn-mobile');
+
+      function openPosterModal(btn) {
+        const img = btn.querySelector('img');
+        if (!img) return;
+        galleryImage.src = img.src;
+        galleryImage.alt = img.alt;
+        galleryCounter.textContent = '';
+        galleryCaption.querySelector('span').textContent = '';
+        galleryCaption.classList.add('hidden');
+        modal.classList.remove('hidden');
+      }
+
+      if (posterBtn) posterBtn.addEventListener('click', () => openPosterModal(posterBtn));
+      if (posterBtnMobile) posterBtnMobile.addEventListener('click', () => openPosterModal(posterBtnMobile));
+
       closeBtn.addEventListener('click', () => {
         modal.classList.add('hidden');
       });
