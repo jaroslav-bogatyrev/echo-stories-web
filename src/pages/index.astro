@@ -48,7 +48,7 @@ const statusConfig: Record<string, { label: string; classes: string }> = {
       const isLocked = hero.data.locked === true;
       const status = statusConfig[hero.data.status] ?? { label: hero.data.status, classes: 'bg-slate-500/20 text-slate-300 border border-slate-500/30' };
       const inner = (
-        <div class="relative w-full overflow-hidden bg-gray-900 aspect-[4/3] md:aspect-[16/9] lg:aspect-[21/9]">
+        <div class="relative w-full overflow-hidden bg-gray-900 aspect-[4/3] md:aspect-[16/9] lg:aspect-[21/9] rounded-lg border border-gray-200 dark:border-gray-700">
           {hero.imageModule && (
             <Image
               src={hero.imageModule}
@@ -113,7 +113,7 @@ const statusConfig: Record<string, { label: string; classes: string }> = {
           const isLocked = project.data.locked === true;
           const status = statusConfig[project.data.status] ?? { label: project.data.status, classes: 'bg-slate-500/20 text-slate-300 border border-slate-500/30' };
           const inner = (
-            <div class="relative aspect-video w-full overflow-hidden bg-gray-900">
+            <div class="relative aspect-video w-full overflow-hidden bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
               {project.imageModule && (
                 <Image
                   src={project.imageModule}
