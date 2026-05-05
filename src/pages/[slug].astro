@@ -366,7 +366,7 @@ const pageDescription = project.data.logline?.en ||
               href={project.data.links.instagram}
               target="_blank"
               rel="noopener noreferrer"
-              class="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-colors"
+              class="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
               aria-label="Instagram"
             >
               <svg class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 24 24">
@@ -380,7 +380,7 @@ const pageDescription = project.data.logline?.en ||
               href={project.data.links.facebook}
               target="_blank"
               rel="noopener noreferrer"
-              class="text-gray-700 hover:text-gray-900 transition-colors"
+              class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
               aria-label="Facebook"
             >
               <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -393,7 +393,7 @@ const pageDescription = project.data.logline?.en ||
               href={project.data.links.website}
               target="_blank"
               rel="noopener noreferrer"
-              class="text-gray-700 hover:text-gray-900 transition-colors underline"
+              class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors underline"
             >
               {project.data.links.websiteText || project.data.links.website.replace(/^https?:\/\//, '').replace(/\/$/, '')}
             </a>
