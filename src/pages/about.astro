@@ -8,12 +8,12 @@ import Layout from '../layouts/Layout.astro';
   type="website"
 >
   <div class="max-w-3xl mx-auto px-6 py-12 md:py-16">
-    <h1 class="text-2xl md:text-3xl font-medium mb-8">About</h1>
+    <h1 class="font-display text-3xl md:text-4xl uppercase mb-8 text-ink echo-waves">About</h1>
 
-    <div class="space-y-6 text-base md:text-lg leading-relaxed">
+    <div class="ink-border p-6 md:p-8 space-y-6 text-base md:text-lg leading-relaxed text-ink/90">
       <p>
-        <strong>Echo Stories</strong> is a Prague-based independent film production company founded by producer
-        <strong>Iuliia Mamaeva</strong>, specializing in author-driven fiction and documentary films.
+        <strong class="text-ink">Echo Stories</strong> is a Prague-based independent film production company founded by producer
+        <strong class="text-ink">Iuliia Mamaeva</strong>, specializing in author-driven fiction and documentary films.
         We connect European talent with filmmakers from Central Asia and the Middle East,
         building a slate defined by international collaboration and cross-regional storytelling.
       </p>
@@ -27,40 +27,40 @@ import Layout from '../layouts/Layout.astro';
       <p>
         Although recently established, the company has quickly gained recognition in the international
         film community, participating in major development platforms including the
-        <strong>MIDPOINT Series Launch/Short</strong>, <strong>Be2Be Exchange at MIA</strong>,
-        <strong>East-West Talent Lab</strong>, and the <strong>ECAM Forum</strong>.
+        <strong class="text-ink">MIDPOINT Series Launch/Short</strong>, <strong class="text-ink">Be2Be Exchange at MIA</strong>,
+        <strong class="text-ink">East-West Talent Lab</strong>, and the <strong class="text-ink">ECAM Forum</strong>.
       </p>
       
       <p>
         Currently in development is the debut feature film of director Liza Chakanova,
-        <em>"Kupala Night"</em>, which won the Belarusian Filmmakers' Network development incubator
-        program and was presented at the <strong>Berlinale – BIFA Pitching Event 2026</strong>.
-        The company's short animation <em>"Nun"</em> has been selected for the
-        <strong>Zlín Film Festival</strong>, <strong>Anifilm 2026</strong> and the
-        <strong>Cannes Short Film Corner | Rendez-vous Industry</strong>.
-        The comedy mockumentary series <em>"Paralegal"</em> is set to pitch at the
-        <strong>Writers' Vision Pitch @ Seriencamp Festival 2026</strong>.
+        <em class="text-brand-red">"Kupala Night"</em>, which won the Belarusian Filmmakers' Network development incubator
+        program and was presented at the <strong class="text-ink">Berlinale – BIFA Pitching Event 2026</strong>.
+        The company's short animation <em class="text-brand-red">"Nun"</em> has been selected for the
+        <strong class="text-ink">Zlín Film Festival</strong>, <strong class="text-ink">Anifilm 2026</strong> and the
+        <strong class="text-ink">Cannes Short Film Corner | Rendez-vous Industry</strong>.
+        The comedy mockumentary series <em class="text-brand-red">"Paralegal"</em> is set to pitch at the
+        <strong class="text-ink">Writers' Vision Pitch @ Seriencamp Festival 2026</strong>.
       </p>
     </div>
     
     <div class="mt-16">
-      <h2 class="text-xl font-medium mb-6">Selected Projects</h2>
+      <div class="filmstrip mb-6"><span class="text-xs font-bold uppercase text-muted">Projects</span></div>
       <div class="space-y-3 text-base">
-        <div>
-          <span class="font-medium">Completed:</span>
-          <span class="ml-2 text-gray-600 dark:text-gray-300">Nun (short animation) — Zlín Film Festival, Anifilm 2026, Cannes Short Film Corner</span>
+        <div class="flex flex-wrap items-baseline gap-2">
+          <span class="burst-badge text-brand-green border-brand-green">Completed</span>
+          <span class="text-ink/80">Nun (short animation) — Zlín Film Festival, Anifilm 2026, Cannes Short Film Corner</span>
         </div>
-        <div>
-          <span class="font-medium">Pre-production:</span>
-          <span class="ml-2 text-gray-600 dark:text-gray-300">Night Games (short)</span>
+        <div class="flex flex-wrap items-baseline gap-2">
+          <span class="burst-badge text-brand-pink border-brand-pink">Pre-production</span>
+          <span class="text-ink/80">Night Games (short)</span>
         </div>
-        <div>
-          <span class="font-medium">Post-production:</span>
-          <span class="ml-2 text-gray-600 dark:text-gray-300">The Apple Tree That Blossomed Twice (short)</span>
+        <div class="flex flex-wrap items-baseline gap-2">
+          <span class="burst-badge text-brand-yellow border-brand-yellow">Post-production</span>
+          <span class="text-ink/80">The Apple Tree That Blossomed Twice (short)</span>
         </div>
-        <div>
-          <span class="font-medium">In Development:</span>
-          <span class="ml-2 text-gray-600 dark:text-gray-300">Kupala Night (feature), Paralegal (comedy mockumentary series) — Writers' Vision Pitch @ Seriencamp Festival 2026, Ai-Ai (3D animated series)</span>
+        <div class="flex flex-wrap items-baseline gap-2">
+          <span class="burst-badge text-muted border-muted">In Development</span>
+          <span class="text-ink/80">Kupala Night (feature), Paralegal (comedy mockumentary series) — Writers' Vision Pitch @ Seriencamp Festival 2026, Ai-Ai (3D animated series)</span>
         </div>
       </div>
     </div>

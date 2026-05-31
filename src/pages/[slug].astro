@@ -135,26 +135,24 @@ const pageDescription = project.data.logline?.en ||
 
   <article class="mx-auto max-w-7xl px-4 py-12">
     <!-- Title -->
-    <h1 class="mb-8 font-serif text-4xl md:text-5xl">
+    <h1 class="mb-6 font-display text-4xl md:text-5xl uppercase text-ink">
       {project.data.title.en}
-      {project.data.title.cz && <span class="italic"> \ {project.data.title.cz}</span>}
+      {project.data.title.cz && <span class="normal-case italic text-3xl md:text-4xl text-ink/70"> \ {project.data.title.cz}</span>}
     </h1>
 
     <!-- Category meta + Logline: always above the grid -->
-    <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">
-      <span class="capitalize font-medium text-gray-700 dark:text-gray-200">{project.data.category.join(', ')}</span>
-      <span class="mx-3">•</span>
-      <span>{project.data.year}</span>
-      {project.data.duration && <><span class="mx-3">•</span><span>{project.data.duration}{project.data.category.includes('series') ? ' / ep.' : ''}</span></>}
-      {project.data.category.includes('series') && project.data.episodes && <><span class="mx-3">•</span><span>{project.data.episodes} ep.</span></>}
-      {project.data.category.includes('series') && project.data.seasons && <><span class="mx-3">•</span><span>{project.data.seasons} seasons</span></>}
-      <span class="mx-3">•</span>
-      <span class="capitalize">{project.data.status}</span>
-    </p>
+    <div class="flex flex-wrap items-center gap-2 mb-4">
+      <span class="burst-badge text-brand-yellow border-brand-yellow">{project.data.category.join(', ')}</span>
+      <span class="burst-badge text-ink/70 border-ink/40">{project.data.year}</span>
+      {project.data.duration && <span class="burst-badge text-ink/70 border-ink/40">{project.data.duration}{project.data.category.includes('series') ? ' / ep.' : ''}</span>}
+      {project.data.category.includes('series') && project.data.episodes && <span class="burst-badge text-ink/70 border-ink/40">{project.data.episodes} ep.</span>}
+      {project.data.category.includes('series') && project.data.seasons && <span class="burst-badge text-ink/70 border-ink/40">{project.data.seasons} seasons</span>}
+      <span class="burst-badge text-brand-red border-brand-red">{project.data.status}</span>
+    </div>
     {project.data.logline && (
-      <p class="text-lg text-gray-700 dark:text-gray-300 mb-10">
+      <p class="text-lg text-ink/80 mb-10 max-w-3xl">
         {project.data.logline.en}
-        {project.data.logline.cz && <span class="italic"> \ {project.data.logline.cz}</span>}
+        {project.data.logline.cz && <span class="italic text-ink/60"> \ {project.data.logline.cz}</span>}
       </p>
     )}
 
@@ -162,25 +160,25 @@ const pageDescription = project.data.logline?.en ||
       <!-- WITH poster: 2-col grid for poster + synopsis -->
       <div class="md:grid md:grid-cols-[180px_1fr] md:gap-x-12 md:items-start mb-12">
         <div class="mb-6 md:mb-0">
-          <button type="button" id="poster-btn" class="hidden md:block group cursor-zoom-in w-full rounded border border-gray-300 dark:border-gray-600 overflow-hidden" aria-label="View poster full size">
-            <Image src={posterImage} alt={`${project.data.title.en} poster`} class="w-full shadow-lg transition-transform duration-300 group-hover:scale-105" />
+          <button type="button" id="poster-btn" class="hidden md:block group cursor-zoom-in w-full ink-border overflow-hidden" aria-label="View poster full size">
+            <Image src={posterImage} alt={`${project.data.title.en} poster`} class="w-full shadow-ink-sm transition-transform duration-300 group-hover:scale-105" />
           </button>
         </div>
         <div>
-          <button type="button" id="poster-btn-mobile" class="block group cursor-zoom-in mb-8 md:hidden rounded border border-gray-300 dark:border-gray-600 overflow-hidden w-32" aria-label="View poster full size">
-            <Image src={posterImage} alt={`${project.data.title.en} poster`} class="w-full shadow-lg transition-transform duration-300 group-hover:scale-105" />
+          <button type="button" id="poster-btn-mobile" class="block group cursor-zoom-in mb-8 md:hidden ink-border overflow-hidden w-32" aria-label="View poster full size">
+            <Image src={posterImage} alt={`${project.data.title.en} poster`} class="w-full shadow-ink-sm transition-transform duration-300 group-hover:scale-105" />
           </button>
-          <div class="prose prose-lg dark:prose-invert max-w-none md:grid md:grid-cols-2">
+          <div class="prose prose-lg max-w-none md:grid md:grid-cols-2 bg-[var(--yellow)]/5 border-l-4 border-brand-yellow p-6 rounded-r-lg">
             {synopsisEn && (
               <div class="mb-6 md:mb-0 md:pr-8">
-                <div class="mb-4"><span class="inline-flex items-center px-3 py-1 text-sm font-semibold bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-md">EN</span></div>
-                <div class="whitespace-pre-wrap">{synopsisEn}</div>
+                <div class="mb-4"><span class="burst-badge text-ink border-ink">EN</span></div>
+                <div class="whitespace-pre-wrap text-ink/90">{synopsisEn}</div>
               </div>
             )}
             {synopsisCz && (
-              <div class="md:border-l md:border-gray-200 dark:md:border-gray-700 md:pl-8">
-                <div class="mb-4"><span class="inline-flex items-center px-3 py-1 text-sm font-semibold bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-md">CZ</span></div>
-                <div class="whitespace-pre-wrap">{synopsisCz}</div>
+              <div class="md:border-l-2 md:border-ink/20 md:pl-8">
+                <div class="mb-4"><span class="burst-badge text-ink border-ink">CZ</span></div>
+                <div class="whitespace-pre-wrap text-ink/90">{synopsisCz}</div>
               </div>
             )}
           </div>
@@ -188,17 +186,17 @@ const pageDescription = project.data.logline?.en ||
       </div>
     ) : (
       <!-- WITHOUT poster: synopsis spans full width -->
-      <div class="prose prose-lg dark:prose-invert max-w-none mb-12 md:grid md:grid-cols-2">
+      <div class="prose prose-lg max-w-none mb-12 md:grid md:grid-cols-2 bg-[var(--yellow)]/5 border-l-4 border-brand-yellow p-6 rounded-r-lg">
         {synopsisEn && (
           <div class="mb-6 md:mb-0 md:pr-8">
-            <div class="mb-4"><span class="inline-flex items-center px-3 py-1 text-sm font-semibold bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-md">EN</span></div>
-            <div class="whitespace-pre-wrap">{synopsisEn}</div>
+            <div class="mb-4"><span class="burst-badge text-ink border-ink">EN</span></div>
+            <div class="whitespace-pre-wrap text-ink/90">{synopsisEn}</div>
           </div>
         )}
         {synopsisCz && (
-          <div class="md:border-l md:border-gray-200 dark:md:border-gray-700 md:pl-8">
-            <div class="mb-4"><span class="inline-flex items-center px-3 py-1 text-sm font-semibold bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-md">CZ</span></div>
-            <div class="whitespace-pre-wrap">{synopsisCz}</div>
+          <div class="md:border-l-2 md:border-ink/20 md:pl-8">
+            <div class="mb-4"><span class="burst-badge text-ink border-ink">CZ</span></div>
+            <div class="whitespace-pre-wrap text-ink/90">{synopsisCz}</div>
           </div>
         )}
       </div>
@@ -218,7 +216,7 @@ const pageDescription = project.data.logline?.en ||
         return (
           <div class={isProduction && prevIsNonProduction ? 'mt-5' : ''}>
             <dt class="inline font-medium">{credit.role}:</dt>
-            <dd class="inline ml-2 text-gray-700 dark:text-gray-300">{credit.name}</dd>
+            <dd class="inline ml-2 text-ink/80">{credit.name}</dd>
           </div>
         );
       };
@@ -229,7 +227,7 @@ const pageDescription = project.data.logline?.en ||
             {leftCredits.map((credit, i) => renderCreditItem(credit, i, leftCredits))}
           </dl>
           {rightCredits.length > 0 && (
-            <dl class="space-y-1 border-t border-gray-200 dark:border-gray-700 pt-4 md:border-t-0 md:pt-0 md:border-l md:border-gray-200 dark:md:border-gray-700 md:pl-8">
+            <dl class="space-y-1 border-t border-ink/20 pt-4 md:border-t-0 md:pt-0 md:border-l md:border-ink/20  md:pl-8">
               {rightCredits.map((credit, i) => renderCreditItem(credit, i, rightCredits))}
             </dl>
           )}
@@ -240,25 +238,25 @@ const pageDescription = project.data.logline?.en ||
         // WITH poster: [180px | 1fr] label+content grid
         return (
           <div class="md:grid md:grid-cols-[180px_1fr] md:gap-x-12 md:gap-y-10 md:items-start mb-12">
-            <div class="mb-2 md:mb-0"><h2 class="font-serif text-2xl leading-none">Credits</h2></div>
+            <div class="mb-2 md:mb-0"><h2 class="font-display text-2xl leading-none">Credits</h2></div>
             <div>{creditsDl}</div>
 
             {project.data.support && project.data.support.length > 0 && (
               <>
-                <div class="mt-8 mb-2 md:mt-0 md:mb-0"><h2 class="font-serif text-2xl leading-none">Support</h2></div>
-                <ul class="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
+                <div class="mt-8 mb-2 md:mt-0 md:mb-0"><h2 class="font-display text-2xl leading-none">Support</h2></div>
+                <ul class="list-disc list-inside space-y-1 text-ink/80">
                   {project.data.support.map(org => <li>{org}</li>)}
                 </ul>
               </>
             )}
             {project.data.pitching && project.data.pitching.length > 0 && (
               <>
-                <div class="mt-8 mb-2 md:mt-0 md:mb-0"><h2 class="font-serif text-2xl leading-none">Development & Pitching</h2></div>
-                <ul class="space-y-1 text-gray-700 dark:text-gray-300">
+                <div class="mt-8 mb-2 md:mt-0 md:mb-0"><h2 class="font-display text-2xl leading-none">Development & Pitching</h2></div>
+                <ul class="space-y-1 text-ink/80">
                   {project.data.pitching.map(event => (
                     <li>
                       <span>{event.name}</span>
-                      {event.year && <span class="text-gray-500"> ({event.year})</span>}
+                      {event.year && <span class="text-muted"> ({event.year})</span>}
                       {event.award && <span class="italic"> – {event.award}</span>}
                     </li>
                   ))}
@@ -267,24 +265,24 @@ const pageDescription = project.data.logline?.en ||
             )}
             {project.data.festivals && project.data.festivals.length > 0 && (
               <>
-                <div class="mt-8 mb-2 md:mt-0 md:mb-0"><h2 class="font-serif text-2xl leading-none">Official Selection</h2></div>
+                <div class="mt-8 mb-2 md:mt-0 md:mb-0"><h2 class="font-display text-2xl leading-none">Official Selection</h2></div>
                 <div>
                   {laurels.length > 0 && (
                     <div class="flex flex-wrap gap-6 mb-6 items-end">
                       {laurels.map(l => (
-                        <Image src={l.image} alt={`${l.name} laurel`} class="h-auto w-44 object-contain dark:invert" />
+                        <Image src={l.image} alt={`${l.name} laurel`} class="h-auto w-44 object-contain " />
                       ))}
                     </div>
                   )}
                   {project.data.festivals.filter(f => !f.laurel).length > 0 && (
-                    <ul class="space-y-1 text-gray-700 dark:text-gray-300">
+                    <ul class="space-y-1 text-ink/80">
                       {project.data.festivals.filter(f => !f.laurel).map(festival => (
                         <li>
                           {festival.url
-                            ? <a href={festival.url} target="_blank" rel="noopener noreferrer" class="underline hover:text-gray-900 dark:hover:text-gray-100">{festival.name}</a>
+                            ? <a href={festival.url} target="_blank" rel="noopener noreferrer" class="underline hover:text-brand-red">{festival.name}</a>
                             : <span>{festival.name}</span>
                           }
-                          {festival.year && <span class="text-gray-500"> ({festival.year})</span>}
+                          {festival.year && <span class="text-muted"> ({festival.year})</span>}
                           {festival.award && <span class="italic"> – {festival.award}</span>}
                         </li>
                       ))}
@@ -300,25 +298,25 @@ const pageDescription = project.data.logline?.en ||
         return (
           <div class="mb-12 space-y-10">
             <div>
-              <h2 class="font-serif text-2xl leading-none mb-4">Credits</h2>
+              <h2 class="font-display text-2xl leading-none mb-4">Credits</h2>
               {creditsDl}
             </div>
             {project.data.support && project.data.support.length > 0 && (
               <div>
-                <h2 class="font-serif text-2xl leading-none mb-4">Support</h2>
-                <ul class="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
+                <h2 class="font-display text-2xl leading-none mb-4">Support</h2>
+                <ul class="list-disc list-inside space-y-1 text-ink/80">
                   {project.data.support.map(org => <li>{org}</li>)}
                 </ul>
               </div>
             )}
             {project.data.pitching && project.data.pitching.length > 0 && (
               <div>
-                <h2 class="font-serif text-2xl leading-none mb-4">Development & Pitching</h2>
-                <ul class="space-y-1 text-gray-700 dark:text-gray-300">
+                <h2 class="font-display text-2xl leading-none mb-4">Development & Pitching</h2>
+                <ul class="space-y-1 text-ink/80">
                   {project.data.pitching.map(event => (
                     <li>
                       <span>{event.name}</span>
-                      {event.year && <span class="text-gray-500"> ({event.year})</span>}
+                      {event.year && <span class="text-muted"> ({event.year})</span>}
                       {event.award && <span class="italic"> – {event.award}</span>}
                     </li>
                   ))}
@@ -327,23 +325,23 @@ const pageDescription = project.data.logline?.en ||
             )}
             {project.data.festivals && project.data.festivals.length > 0 && (
               <div>
-                <h2 class="font-serif text-2xl leading-none mb-4">Official Selection</h2>
+                <h2 class="font-display text-2xl leading-none mb-4">Official Selection</h2>
                 {laurels.length > 0 && (
                   <div class="flex flex-wrap gap-6 mb-6 items-end">
                     {laurels.map(l => (
-                      <Image src={l.image} alt={`${l.name} laurel`} class="h-auto w-44 object-contain dark:invert" />
+                      <Image src={l.image} alt={`${l.name} laurel`} class="h-auto w-44 object-contain " />
                     ))}
                   </div>
                 )}
                 {project.data.festivals.filter(f => !f.laurel).length > 0 && (
-                  <ul class="space-y-1 text-gray-700 dark:text-gray-300">
+                  <ul class="space-y-1 text-ink/80">
                     {project.data.festivals.filter(f => !f.laurel).map(festival => (
                       <li>
                         {festival.url
-                          ? <a href={festival.url} target="_blank" rel="noopener noreferrer" class="underline hover:text-gray-900 dark:hover:text-gray-100">{festival.name}</a>
+                          ? <a href={festival.url} target="_blank" rel="noopener noreferrer" class="underline hover:text-brand-red">{festival.name}</a>
                           : <span>{festival.name}</span>
                         }
-                        {festival.year && <span class="text-gray-500"> ({festival.year})</span>}
+                        {festival.year && <span class="text-muted"> ({festival.year})</span>}
                         {festival.award && <span class="italic"> – {festival.award}</span>}
                       </li>
                     ))}
@@ -358,15 +356,15 @@ const pageDescription = project.data.logline?.en ||
 
     <!-- Links -->
     {project.data.links && (project.data.links.instagram || project.data.links.facebook || project.data.links.website) && (
-      <section class="mb-12 border-t border-gray-200 dark:border-gray-700 pt-12">
-        <h2 class="mb-4 font-serif text-2xl">Links</h2>
+      <section class="mb-12 border-t-[3px] border-ink/20 pt-12">
+        <h2 class="mb-4 font-display text-2xl">Links</h2>
         <div class="flex items-center gap-4">
           {project.data.links.instagram && (
             <a
               href={project.data.links.instagram}
               target="_blank"
               rel="noopener noreferrer"
-              class="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+              class="flex items-center gap-2 text-ink/80 hover:text-gray-900 hover:text-brand-red transition-colors"
               aria-label="Instagram"
             >
               <svg class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 24 24">
@@ -380,7 +378,7 @@ const pageDescription = project.data.logline?.en ||
               href={project.data.links.facebook}
               target="_blank"
               rel="noopener noreferrer"
-              class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+              class="text-ink/80 hover:text-gray-900 hover:text-brand-red transition-colors"
               aria-label="Facebook"
             >
               <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -393,7 +391,7 @@ const pageDescription = project.data.logline?.en ||
               href={project.data.links.website}
               target="_blank"
               rel="noopener noreferrer"
-              class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors underline"
+              class="text-ink/80 hover:text-gray-900 hover:text-brand-red transition-colors underline"
             >
               {project.data.links.websiteText || project.data.links.website.replace(/^https?:\/\//, '').replace(/\/$/, '')}
             </a>
@@ -404,9 +402,9 @@ const pageDescription = project.data.logline?.en ||
 
     <!-- Video -->
     {project.data.video && (
-      <div class="mb-12 border-t border-gray-200 dark:border-gray-700 pt-12">
+      <div class="mb-12 border-t-[3px] border-ink/20 pt-12">
         {project.data.video.provider === 'youtube' && project.data.video.id && (
-          <div class="aspect-video rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div class="aspect-video ink-border overflow-hidden">
             <iframe
               width="100%"
               height="100%"
@@ -419,7 +417,7 @@ const pageDescription = project.data.logline?.en ||
           </div>
         )}
         {project.data.video.provider === 'vimeo' && project.data.video.id && (
-          <div class="aspect-video rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div class="aspect-video ink-border overflow-hidden">
             <iframe
               src={`https://player.vimeo.com/video/${project.data.video.id}${project.data.video.hash ? `?h=${project.data.video.hash}` : ''}`}
               width="100%"
@@ -440,7 +438,7 @@ const pageDescription = project.data.logline?.en ||
 
     <!-- Stills Gallery -->
     {stills && stills.length > 0 && (
-      <section class="mb-12 border-t border-gray-200 dark:border-gray-700 pt-12">
+      <section class="mb-12 border-t-[3px] border-ink/20 pt-12">
         <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {stills.map((still, index) => {
             const isPortrait = still.image && still.image.height > still.image.width;
@@ -448,7 +446,7 @@ const pageDescription = project.data.logline?.en ||
               <button
                 type="button"
                 data-gallery-index={index}
-                class="relative w-full overflow-hidden md:cursor-pointer group rounded-lg border border-gray-200 dark:border-gray-700"
+                class="relative w-full overflow-hidden md:cursor-pointer group ink-border"
                 style={`aspect-ratio: ${isPortrait ? '2/3' : '16/9'}`}
               >
                 <Image
@@ -606,13 +604,13 @@ const pageDescription = project.data.logline?.en ||
     </script>
 
     <!-- Navigation -->
-    <nav class="mt-12 flex justify-between border-t border-gray-200 dark:border-gray-700 pt-8">
+    <nav class="mt-12 flex justify-between border-t border-ink/20 pt-8">
       <div>
         {prevProject && (
-          <a href={`${base}/${prevProject.id.replace('/index', '')}`.replace(/\/+/g, '/')} class="group flex items-center gap-2 hover:text-gray-600 dark:hover:text-gray-400">
+          <a href={`${base}/${prevProject.id.replace('/index', '')}`.replace(/\/+/g, '/')} class="group flex items-center gap-2 hover:text-brand-red">
             <span class="text-2xl">←</span>
             <div>
-              <div class="text-sm text-gray-500">Previous</div>
+              <div class="text-sm text-muted">Previous</div>
               <div class="group-hover:underline">{prevProject.data.title.en}</div>
             </div>
           </a>
@@ -620,9 +618,9 @@ const pageDescription = project.data.logline?.en ||
       </div>
       <div class="text-right">
         {nextProject && (
-          <a href={`${base}/${nextProject.id.replace('/index', '')}`.replace(/\/+/g, '/')} class="group flex items-center gap-2 hover:text-gray-600 dark:hover:text-gray-400">
+          <a href={`${base}/${nextProject.id.replace('/index', '')}`.replace(/\/+/g, '/')} class="group flex items-center gap-2 hover:text-brand-red">
             <div>
-              <div class="text-sm text-gray-500">Next</div>
+              <div class="text-sm text-muted">Next</div>
               <div class="group-hover:underline">{nextProject.data.title.en}</div>
             </div>
             <span class="text-2xl">→</span>
