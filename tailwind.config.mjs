@@ -10,6 +10,7 @@ export default {
       colors: {
         paper: 'var(--paper)',
         ink: 'var(--ink)',
+        surface: 'var(--surface)',
         brand: {
           red: 'var(--red)',
           yellow: 'var(--yellow)',
@@ -31,6 +32,8 @@ export default {
       boxShadow: {
         'ink': '4px 4px 0 var(--ink)',
         'ink-sm': '2px 2px 0 var(--ink)',
+        'warm': '0 4px 20px -2px rgba(245, 158, 11, 0.1)',
+        'elevated': '0 8px 32px -4px rgba(0, 0, 0, 0.12)',
       },
     },
   },

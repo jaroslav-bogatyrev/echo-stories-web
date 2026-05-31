@@ -135,24 +135,24 @@ const pageDescription = project.data.logline?.en ||
 
   <article class="mx-auto max-w-7xl px-4 py-12">
     <!-- Title -->
-    <h1 class="mb-6 font-display text-4xl md:text-5xl uppercase text-ink">
+    <h1 class="mb-6 font-display text-4xl md:text-5xl uppercase text-ink leading-tight">
       {project.data.title.en}
-      {project.data.title.cz && <span class="normal-case italic text-3xl md:text-4xl text-ink/70"> \ {project.data.title.cz}</span>}
+      {project.data.title.cz && <span class="normal-case italic text-3xl md:text-4xl text-ink/60"> \ {project.data.title.cz}</span>}
     </h1>
 
     <!-- Category meta + Logline: always above the grid -->
-    <div class="flex flex-wrap items-center gap-2 mb-4">
+    <div class="flex flex-wrap items-center gap-2 mb-5">
       <span class="burst-badge text-brand-yellow border-brand-yellow">{project.data.category.join(', ')}</span>
-      <span class="burst-badge text-ink/70 border-ink/40">{project.data.year}</span>
-      {project.data.duration && <span class="burst-badge text-ink/70 border-ink/40">{project.data.duration}{project.data.category.includes('series') ? ' / ep.' : ''}</span>}
-      {project.data.category.includes('series') && project.data.episodes && <span class="burst-badge text-ink/70 border-ink/40">{project.data.episodes} ep.</span>}
-      {project.data.category.includes('series') && project.data.seasons && <span class="burst-badge text-ink/70 border-ink/40">{project.data.seasons} seasons</span>}
+      <span class="burst-badge text-ink/60 border-ink/25">{project.data.year}</span>
+      {project.data.duration && <span class="burst-badge text-ink/60 border-ink/25">{project.data.duration}{project.data.category.includes('series') ? ' / ep.' : ''}</span>}
+      {project.data.category.includes('series') && project.data.episodes && <span class="burst-badge text-ink/60 border-ink/25">{project.data.episodes} ep.</span>}
+      {project.data.category.includes('series') && project.data.seasons && <span class="burst-badge text-ink/60 border-ink/25">{project.data.seasons} seasons</span>}
       <span class="burst-badge text-brand-red border-brand-red">{project.data.status}</span>
     </div>
     {project.data.logline && (
-      <p class="text-lg text-ink/80 mb-10 max-w-3xl">
+      <p class="text-lg text-ink/75 mb-10 max-w-3xl leading-relaxed">
         {project.data.logline.en}
-        {project.data.logline.cz && <span class="italic text-ink/60"> \ {project.data.logline.cz}</span>}
+        {project.data.logline.cz && <span class="italic text-ink/50"> \ {project.data.logline.cz}</span>}
       </p>
     )}
 
@@ -168,7 +168,7 @@ const pageDescription = project.data.logline?.en ||
           <button type="button" id="poster-btn-mobile" class="block group cursor-zoom-in mb-8 md:hidden ink-border overflow-hidden w-32" aria-label="View poster full size">
             <Image src={posterImage} alt={`${project.data.title.en} poster`} class="w-full shadow-ink-sm transition-transform duration-300 group-hover:scale-105" />
           </button>
-          <div class="prose prose-lg max-w-none md:grid md:grid-cols-2 bg-[var(--yellow)]/5 border-l-4 border-brand-yellow p-6 rounded-r-lg">
+          <div class="prose prose-lg max-w-none md:grid md:grid-cols-2 warm-panel">
             {synopsisEn && (
               <div class="mb-6 md:mb-0 md:pr-8">
                 <div class="mb-4"><span class="burst-badge text-ink border-ink">EN</span></div>
@@ -186,7 +186,7 @@ const pageDescription = project.data.logline?.en ||
       </div>
     ) : (
       <!-- WITHOUT poster: synopsis spans full width -->
-      <div class="prose prose-lg max-w-none mb-12 md:grid md:grid-cols-2 bg-[var(--yellow)]/5 border-l-4 border-brand-yellow p-6 rounded-r-lg">
+      <div class="prose prose-lg max-w-none mb-12 md:grid md:grid-cols-2 warm-panel">
         {synopsisEn && (
           <div class="mb-6 md:mb-0 md:pr-8">
             <div class="mb-4"><span class="burst-badge text-ink border-ink">EN</span></div>
@@ -356,7 +356,7 @@ const pageDescription = project.data.logline?.en ||
 
     <!-- Links -->
     {project.data.links && (project.data.links.instagram || project.data.links.facebook || project.data.links.website) && (
-      <section class="mb-12 border-t-[3px] border-ink/20 pt-12">
+      <section class="mb-12 section-divider pt-0">
         <h2 class="mb-4 font-display text-2xl">Links</h2>
         <div class="flex items-center gap-4">
           {project.data.links.instagram && (
@@ -402,7 +402,7 @@ const pageDescription = project.data.logline?.en ||
 
     <!-- Video -->
     {project.data.video && (
-      <div class="mb-12 border-t-[3px] border-ink/20 pt-12">
+      <div class="mb-12 section-divider pt-0">
         {project.data.video.provider === 'youtube' && project.data.video.id && (
           <div class="aspect-video ink-border overflow-hidden">
             <iframe
@@ -438,7 +438,7 @@ const pageDescription = project.data.logline?.en ||
 
     <!-- Stills Gallery -->
     {stills && stills.length > 0 && (
-      <section class="mb-12 border-t-[3px] border-ink/20 pt-12">
+      <section class="mb-12 section-divider pt-0">
         <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {stills.map((still, index) => {
             const isPortrait = still.image && still.image.height > still.image.width;

@@ -14,36 +14,36 @@ const isActive = (path: string) => {
 };
 ---
 
-<header class="sticky top-0 z-40 border-b-[3px] border-ink bg-paper/95 backdrop-blur-sm">
+<header class="sticky top-0 z-40 bg-paper/90 backdrop-blur-md border-b border-ink/10">
   <div class="max-w-7xl mx-auto px-6 py-4">
     <nav class="flex justify-between items-center">
       <a
         href={base}
-        class="group flex items-center gap-2"
+        class="group flex items-center gap-2.5"
       >
         <span class="font-display text-xl md:text-2xl uppercase tracking-tight text-ink transition-colors duration-200 group-hover:text-brand-red">
           {siteConfig.siteName}
         </span>
-        <span class="text-brand-yellow text-lg font-bold opacity-70 group-hover:opacity-100 transition-opacity" aria-hidden="true">✦</span>
+        <span class="text-brand-yellow text-xs font-bold opacity-50 group-hover:opacity-100 transition-opacity tracking-[-0.12em]" aria-hidden="true">)))</span>
       </a>
       
       <div class="flex items-center gap-6 md:gap-10">
         <a
           href={`${base}/about`.replace(/\/+/g, '/')}
-          class={`text-base md:text-lg font-semibold uppercase tracking-wide transition-colors duration-200 ${
+          class={`text-sm md:text-base font-semibold uppercase tracking-wider transition-colors duration-200 ${
             isActive("/about") 
               ? "text-brand-red" 
-              : "text-ink/70 hover:text-brand-red"
+              : "text-ink/60 hover:text-ink"
           }`}
         >
           About
         </a>
         <a
           href={`${base}/contact`.replace(/\/+/g, '/')}
-          class={`text-base md:text-lg font-semibold uppercase tracking-wide transition-colors duration-200 ${
+          class={`text-sm md:text-base font-semibold uppercase tracking-wider transition-colors duration-200 ${
             isActive("/contact") 
               ? "text-brand-red" 
-              : "text-ink/70 hover:text-brand-red"
+              : "text-ink/60 hover:text-ink"
           }`}
         >
           Contact
