@@ -125,9 +125,11 @@ const movieStructuredData = {
 const pageDescription = project.data.logline?.en ||
   `${project.data.title.en} - ${project.data.category.join(', ')} film by Echo Stories. ${synopsisEn.substring(0, 150)}...`;
 
-// Determine the OG image: prefer poster, then first still
+// Determine the OG image: prefer poster, then first still, then main project image
+const mainImage = allProjectImages[`/src/content/projects/${slug}/${project.data.image.replace('./', '')}`]?.default;
 const ogImage = posterImage?.src
-  || (stills.length > 0 ? stills[0].image.src : undefined);
+  || (stills.length > 0 ? stills[0].image.src : undefined)
+  || mainImage?.src;
 ---
 
 <Layout
