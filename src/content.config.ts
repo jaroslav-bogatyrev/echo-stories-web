@@ -52,6 +52,8 @@ const projectsCollection = defineCollection({
       award: z.string().optional(),
       laurel: z.string().optional(),
       url: z.string().optional(),
+      side: z.enum(['left', 'right']).optional(),
+      market: z.boolean().optional(),
     })).optional(),
     synopsis: z.object({
       en: z.string().optional(),

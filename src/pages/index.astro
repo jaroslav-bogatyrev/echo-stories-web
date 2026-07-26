@@ -13,11 +13,15 @@ const projectsWithImages = await Promise.all(
     const slug = project.id.replace('/index', '');
     const imagePath = `/src/content/projects/${slug}/${project.data.image.replace('./', '')}`;
     const imageModule = images[imagePath];
-    const laurels = (project.data.festivals || [])
-      .filter((f: any) => f.laurel)
+    const laurelsRight = (project.data.festivals || [])
+      .filter((f: any) => f.laurel && f.side !== 'left')
       .map((f: any) => images[`/src/content/projects/${slug}/${f.laurel.replace('./', '')}`]?.default)
       .filter(Boolean) as ImageMetadata[];
-    return { ...project, imageModule: imageModule?.default, slug, laurels };
+    const laurelsLeft = (project.data.festivals || [])
+      .filter((f: any) => f.laurel && f.side === 'left')
+      .map((f: any) => images[`/src/content/projects/${slug}/${f.laurel.replace('./', '')}`]?.default)
+      .filter(Boolean) as ImageMetadata[];
+    return { ...project, imageModule: imageModule?.default, slug, laurels: laurelsRight, laurelsLeft };
   })
 );
 
@@ -59,11 +63,18 @@ const statusConfig: Record<string, { label: string; classes: string }> = {
             />
           )}
           <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-          {hero.laurels.length > 0 && (
-            <div class="absolute top-4 right-4 flex flex-col gap-2 items-end z-10">
-              {hero.laurels.map((laurel: ImageMetadata) => (
-                <Image src={laurel} alt="Festival laurel" class="w-20 h-auto object-contain drop-shadow-lg brightness-0 invert" loading="eager" />
-              ))}
+          {(hero.laurels.length > 0 || hero.laurelsLeft.length > 0) && (
+            <div class="absolute top-3 left-3 right-3 md:top-4 md:left-4 md:right-4 flex flex-row justify-between items-start z-10 pointer-events-none">
+              <div class="flex flex-col gap-3 md:gap-6 items-start">
+                {hero.laurelsLeft.map((laurel: ImageMetadata) => (
+                  <Image src={laurel} alt="Festival laurel" class="w-14 sm:w-20 md:w-28 h-auto object-contain drop-shadow-lg brightness-0 invert" loading="eager" />
+                ))}
+              </div>
+              <div class="flex flex-col gap-3 md:gap-6 items-end">
+                {hero.laurels.map((laurel: ImageMetadata) => (
+                  <Image src={laurel} alt="Festival laurel" class="w-14 sm:w-20 md:w-28 h-auto object-contain drop-shadow-lg brightness-0 invert" loading="eager" />
+                ))}
+              </div>
             </div>
           )}
           {isLocked && (
@@ -79,9 +90,9 @@ const statusConfig: Record<string, { label: string; classes: string }> = {
           <div class="absolute bottom-0 left-0 right-0 p-6 md:p-10">
             <div class="flex flex-wrap items-center gap-2 mb-3">
               <span class={`text-xs font-medium px-2.5 py-1 rounded-full ${status.classes}`}>{status.label}</span>
-              {hero.data.festivals && hero.data.festivals.length > 0 && (
+              {hero.data.festivals && hero.data.festivals.filter((f: any) => !f.market).length > 0 && (
                 <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-white/10 text-white/70 border border-white/20">
-                  {hero.data.festivals.length} Festival{hero.data.festivals.length > 1 ? 's' : ''}
+                  {hero.data.festivals.filter((f: any) => !f.market).length} Festival{hero.data.festivals.filter((f: any) => !f.market).length > 1 ? 's' : ''}
                 </span>
               )}
             </div>
@@ -124,10 +135,10 @@ const statusConfig: Record<string, { label: string; classes: string }> = {
                 />
               )}
               <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-              {project.laurels.length > 0 && (
-                <div class="absolute top-2 right-2 flex flex-col gap-1 items-end z-10">
-                  {project.laurels.map((laurel: ImageMetadata) => (
-                    <Image src={laurel} alt="Festival laurel" class="w-14 h-auto object-contain drop-shadow-lg brightness-0 invert" loading="eager" />
+              {(project.laurels.length > 0 || project.laurelsLeft.length > 0) && (
+                <div class="absolute top-2 right-2 flex flex-col gap-3 items-end z-10 pointer-events-none max-h-[80%] overflow-hidden">
+                  {[...project.laurels, ...project.laurelsLeft].map((laurel: ImageMetadata) => (
+                    <Image src={laurel} alt="Festival laurel" class="w-14 sm:w-16 md:w-18 h-auto object-contain drop-shadow-lg brightness-0 invert" loading="eager" />
                   ))}
                 </div>
               )}
