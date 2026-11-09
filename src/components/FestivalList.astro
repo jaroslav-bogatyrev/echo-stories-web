@@ -1,0 +1,45 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+type Festival = NonNullable<CollectionEntry<'projects'>['data']['festivals']>[number];
+
+interface Props {
+  festivals: (Festival & { image?: ImageMetadata })[];
+}
+
+const { festivals } = Astro.props;
+const groups = [
+  { title: 'Festival Selections & Screenings', entries: festivals.filter(festival => !festival.market) },
+  { title: 'Industry Showcase', entries: festivals.filter(festival => festival.market) },
+];
+---
+
+<div class="space-y-8 text-gray-700 dark:text-gray-300">
+  {groups.filter(group => group.entries.length > 0).map(group => (
+    <div>
+      <h3 class="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-600 dark:text-gray-400">{group.title}</h3>
+      <ul class:list={['grid gap-px overflow-hidden rounded-lg border border-gray-200 bg-gray-200 dark:border-gray-800 dark:bg-gray-800', group.entries.length > 1 && 'lg:grid-cols-2']}>
+        {group.entries.map(festival => (
+          <li class:list={['flex items-center gap-4 bg-white px-4 py-4 dark:bg-neutral-950 sm:px-5', group.entries.length > 1 && 'lg:last:odd:col-span-2']}>
+            <div class="min-w-0 flex-1">
+              <h4 class="font-medium leading-snug text-gray-900 dark:text-gray-100">
+                {festival.url
+                  ? <a href={festival.url} target="_blank" rel="noopener noreferrer" class="decoration-gray-400 underline-offset-4 hover:underline focus-visible:underline">{festival.name} <span aria-hidden="true" class="text-xs text-gray-500 dark:text-gray-400">↗</span></a>
+                  : festival.name}
+              </h4>
+              {festival.selection && <p class="mt-1 text-sm leading-snug">{festival.selection}</p>}
+              {festival.award && <p class="mt-1 text-sm font-medium">{festival.award}</p>}
+              {(festival.dates || festival.year) && (
+                <p class="mt-2 text-xs tracking-wide text-gray-600 dark:text-gray-400">{[festival.dates, festival.year].filter(Boolean).join(' ')}</p>
+              )}
+            </div>
+            {festival.image && (
+              <Image src={festival.image} alt="" class="h-14 w-16 shrink-0 object-contain dark:invert sm:w-20" />
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
+</div>

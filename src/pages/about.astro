@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+const nunUrl = `${import.meta.env.BASE_URL}/nun`.replace(/\/+/g, '/');
 ---
 
 <Layout 
@@ -35,9 +36,10 @@ import Layout from '../layouts/Layout.astro';
         Currently in development is the debut feature film of director Liza Chakanova,
         <em>"Kupala Night"</em>, which won the Belarusian Filmmakers' Network development incubator
         program and was presented at the <strong>Berlinale – BIFA Pitching Event 2026</strong>.
-        The company's short animation <em>"Nun"</em> has been selected for the
-        <strong>Zlín Film Festival</strong>, <strong>Anifilm 2026</strong> and the
-        <strong>Cannes Short Film Corner | Rendez-vous Industry</strong>.
+        The company's short animation <em>Nun (Jeptiška)</em> has been selected for
+        <strong>Zlín Film Festival</strong>, <strong>Anifilm</strong>, <strong>StopTrik</strong>,
+        <strong>CINANIMA</strong> and the <strong>London International Animation Festival</strong>,
+        among others. It also took part in <strong>Cannes Short Film Corner | Rendez-vous Industry</strong>.
         The horror-comedy mockumentary series <em>"Paralegal"</em> was awarded the
         <strong>Writers' Vision Pitch Award</strong> at the <strong>Seriencamp Festival 2026</strong>,
         which particularly honors projects in an early creative phase.
@@ -49,15 +51,11 @@ import Layout from '../layouts/Layout.astro';
       <div class="space-y-3 text-base">
         <div>
           <span class="font-medium">Completed:</span>
-          <span class="ml-2 text-gray-600 dark:text-gray-300">Nun (short animation) — Zlín Film Festival, Anifilm 2026, World Festival of Animated Film Varna, SMOF Stop Motion Our Fest, Cannes Short Film Corner</span>
-        </div>
-        <div>
-          <span class="font-medium">Pre-production:</span>
-          <span class="ml-2 text-gray-600 dark:text-gray-300">Night Games (short)</span>
+          <a href={`${nunUrl}#festivals`} class="ml-2 text-gray-600 underline dark:text-gray-300">Nun (Jeptiška) — festival selections and industry showcase</a>
         </div>
         <div>
           <span class="font-medium">Post-production:</span>
-          <span class="ml-2 text-gray-600 dark:text-gray-300">The Apple Tree That Blossomed Twice (short)</span>
+          <span class="ml-2 text-gray-600 dark:text-gray-300">Night Games (short), The Apple Tree That Blossomed Twice (short)</span>
         </div>
         <div>
           <span class="font-medium">In Development:</span>

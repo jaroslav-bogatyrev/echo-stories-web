@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import Layout from '@/layouts/Layout.astro';
+import FestivalList from '@/components/FestivalList.astro';
 import fs from 'fs';
 import path from 'path';
 
@@ -65,14 +66,12 @@ const stills = project.data.stills ? await Promise.all(
   })
 ).then(results => results.filter((r): r is { image: ImageMetadata; alt: string; caption?: string } => r !== null && r.image !== undefined)) : [];
 
-// Load laurel images for festivals
-const laurels = (project.data.festivals || [])
-  .filter(f => f.laurel)
-  .map(f => ({
-    name: f.name,
-    image: allProjectImages[`/src/content/projects/${slug}/${f.laurel!.replace('./', '')}`]?.default ?? null,
-  }))
-  .filter((l): l is { name: string; image: ImageMetadata } => l.image !== null);
+const festivals = (project.data.festivals || []).map(festival => ({
+  ...festival,
+  image: festival.laurel
+    ? allProjectImages[`/src/content/projects/${slug}/${festival.laurel.replace('./', '')}`]?.default
+    : undefined,
+}));
 
 // Load poster if defined
 const posterImage = project.data.poster
@@ -156,7 +155,9 @@ const ogImage = posterImage?.src
       {project.data.category.includes('series') && project.data.episodes && <><span class="mx-3">•</span><span>{project.data.episodes} ep.</span></>}
       {project.data.category.includes('series') && project.data.seasons && <><span class="mx-3">•</span><span>{project.data.seasons} seasons</span></>}
       <span class="mx-3">•</span>
-      <span class="capitalize">{project.data.status}</span>
+      {project.data.status === 'in postproduction'
+        ? <span>Post-production</span>
+        : <span class="capitalize">{project.data.status}</span>}
     </p>
     {project.data.logline && (
       <p class="text-lg text-gray-700 dark:text-gray-300 mb-10">
@@ -272,32 +273,10 @@ const ogImage = posterImage?.src
                 </ul>
               </>
             )}
-            {project.data.festivals && project.data.festivals.length > 0 && (
+            {festivals.length > 0 && (
               <>
-                <div class="mt-8 mb-2 md:mt-0 md:mb-0"><h2 class="font-serif text-2xl leading-none">Official Selection</h2></div>
-                <div>
-                  {laurels.length > 0 && (
-                    <div class="flex flex-wrap gap-6 mb-6 items-end">
-                      {laurels.map(l => (
-                        <Image src={l.image} alt={`${l.name} laurel`} class="h-auto w-44 object-contain dark:invert" />
-                      ))}
-                    </div>
-                  )}
-                  {project.data.festivals.filter(f => !f.laurel).length > 0 && (
-                    <ul class="space-y-1 text-gray-700 dark:text-gray-300">
-                      {project.data.festivals.filter(f => !f.laurel).map(festival => (
-                        <li>
-                          {festival.url
-                            ? <a href={festival.url} target="_blank" rel="noopener noreferrer" class="underline hover:text-gray-900 dark:hover:text-gray-100">{festival.name}</a>
-                            : <span>{festival.name}</span>
-                          }
-                          {festival.year && <span class="text-gray-500"> ({festival.year})</span>}
-                          {festival.award && <span class="italic"> – {festival.award}</span>}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
+                <div class="mt-8 mb-2 md:mt-0 md:mb-0"><h2 id="festivals" class="font-serif text-2xl leading-none">Festivals</h2></div>
+                <FestivalList festivals={festivals} />
               </>
             )}
           </div>
@@ -332,30 +311,10 @@ const ogImage = posterImage?.src
                 </ul>
               </div>
             )}
-            {project.data.festivals && project.data.festivals.length > 0 && (
+            {festivals.length > 0 && (
               <div>
-                <h2 class="font-serif text-2xl leading-none mb-4">Official Selection</h2>
-                {laurels.length > 0 && (
-                  <div class="flex flex-wrap gap-6 mb-6 items-end">
-                    {laurels.map(l => (
-                      <Image src={l.image} alt={`${l.name} laurel`} class="h-auto w-44 object-contain dark:invert" />
-                    ))}
-                  </div>
-                )}
-                {project.data.festivals.filter(f => !f.laurel).length > 0 && (
-                  <ul class="space-y-1 text-gray-700 dark:text-gray-300">
-                    {project.data.festivals.filter(f => !f.laurel).map(festival => (
-                      <li>
-                        {festival.url
-                          ? <a href={festival.url} target="_blank" rel="noopener noreferrer" class="underline hover:text-gray-900 dark:hover:text-gray-100">{festival.name}</a>
-                          : <span>{festival.name}</span>
-                        }
-                        {festival.year && <span class="text-gray-500"> ({festival.year})</span>}
-                        {festival.award && <span class="italic"> – {festival.award}</span>}
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                <h2 id="festivals" class="font-serif text-2xl leading-none mb-4">Festivals</h2>
+                <FestivalList festivals={festivals} />
               </div>
             )}
           </div>

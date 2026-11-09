@@ -49,10 +49,12 @@ const projectsCollection = defineCollection({
     festivals: z.array(z.object({
       name: z.string(),
       year: z.number().optional(),
+      dates: z.string().optional(),
+      selection: z.string().optional(),
       award: z.string().optional(),
       laurel: z.string().optional(),
+      featureLaurel: z.boolean().optional(),
       url: z.string().optional(),
-      side: z.enum(['left', 'right']).optional(),
       market: z.boolean().optional(),
     })).optional(),
     synopsis: z.object({

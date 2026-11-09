@@ -153,16 +153,19 @@ pitching:
 
 #### Festival Selections
 
-Use `festivals` for actual film festival selections and screenings:
+Use `festivals` for confirmed festival selections and screenings. Use `selection` for the programme or competition and `award` for an actual prize. Set `market: true` for industry showcases. Set `featureLaurel: false` to show a laurel only on the project page.
+
+The home page displays up to four laurels on the hero image and up to three on other project cards, in the order they appear in `festivals`.
 
 ```yaml
 festivals:
   - name: Cannes Film Festival
     year: 2026
-    award: Official Selection - Short Film Competition
+    selection: Short Film Competition
   - name: Sundance Film Festival
     year: 2026
-    award: Winner - Best Short Film
+    selection: Short Film Competition
+    award: Best Short Film
 ```
 
 #### Video Providers
