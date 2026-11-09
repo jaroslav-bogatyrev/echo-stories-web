@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import Layout from '@/layouts/Layout.astro';
 import FestivalList from '@/components/FestivalList.astro';
+import ArrowIcon from '@/components/ArrowIcon.astro';
 import fs from 'fs';
 import path from 'path';
 
@@ -151,7 +152,7 @@ const mastheadPosition = slug === 'night-games' ? '70% 50%' : 'center';
         </>
       )}
       <div class="editorial-shell pb-8 pt-10 md:pb-12">
-        <a href={projectsUrl} class="mb-6 inline-flex min-h-9 items-center gap-2 text-sm underline decoration-stone-400 underline-offset-4 hover:decoration-current"><span aria-hidden="true">←</span> Back to projects</a>
+        <a href={projectsUrl} class="mb-6 inline-flex min-h-9 items-center gap-2 text-sm underline decoration-stone-400 underline-offset-4 hover:decoration-current"><ArrowIcon direction="left" /> Back to projects</a>
         <p class:list={['editorial-label mb-2', mainImage && 'project-masthead-label']}>
           {project.data.status === 'in postproduction' ? 'Post-production' : project.data.status}
         </p>
@@ -588,7 +589,7 @@ const mastheadPosition = slug === 'night-games' ? '70% 50%' : 'center';
       <div>
         {prevProject && (
           <a href={`${base}/${prevProject.id.replace('/index', '')}`.replace(/\/+/g, '/')} class="group flex items-center gap-2 hover:text-gray-600 dark:hover:text-gray-400">
-            <span class="text-2xl">←</span>
+            <ArrowIcon direction="left" />
             <div>
               <div class="text-sm text-gray-500">Previous</div>
               <div class="group-hover:underline">{prevProject.data.title.en}</div>
@@ -603,7 +604,7 @@ const mastheadPosition = slug === 'night-games' ? '70% 50%' : 'center';
               <div class="text-sm text-gray-500">Next</div>
               <div class="group-hover:underline">{nextProject.data.title.en}</div>
             </div>
-            <span class="text-2xl">→</span>
+            <ArrowIcon direction="right" />
           </a>
         )}
       </div>

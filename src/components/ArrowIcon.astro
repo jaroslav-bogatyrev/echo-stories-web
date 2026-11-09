@@ -1,0 +1,21 @@
+---
+const paths = {
+  'up-right': 'M5 15 15 5M7 5h8v8',
+  'down-right': 'M5 5l10 10M7 15h8V7',
+  up: 'M10 16V4M5 9l5-5 5 5',
+  down: 'M10 4v12M5 11l5 5 5-5',
+  left: 'M16 10H4m5-5-5 5 5 5',
+  right: 'M4 10h12m-5-5 5 5-5 5',
+};
+
+interface Props {
+  direction: keyof typeof paths;
+  class?: string;
+}
+
+const { direction, class: className } = Astro.props;
+---
+
+<svg aria-hidden="true" focusable="false" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class:list={['inline-block h-4 w-4 shrink-0', className]}>
+  <path d={paths[direction]} />
+</svg>

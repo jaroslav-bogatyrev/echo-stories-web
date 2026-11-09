@@ -1,0 +1,16 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  laurels: { image: ImageMetadata; name: string }[];
+  class?: string;
+}
+
+const { laurels, class: className } = Astro.props;
+---
+
+<ul aria-label="Festival laurels" class:list={['flex flex-wrap items-center gap-x-2 gap-y-1 md:gap-x-3', className]}>
+  {laurels.map(laurel => (
+    <li><Image src={laurel.image} alt={laurel.name} width={192} class="h-11 w-12 object-contain brightness-0 invert sm:h-14 sm:w-16 lg:h-16 lg:w-20" /></li>
+  ))}
+</ul>

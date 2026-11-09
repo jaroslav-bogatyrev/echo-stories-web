@@ -5,62 +5,34 @@ import ThemeToggle from "./ThemeToggle.astro";
 interface Props {
   cinematic?: boolean;
   showThemeToggle?: boolean;
+  mobileNavLink?: { href: string; label: string };
 }
 
-const { cinematic = false, showThemeToggle = true } = Astro.props;
+const { cinematic = false, showThemeToggle = true, mobileNavLink } = Astro.props;
 const pathname = Astro.url.pathname;
 const base = import.meta.env.BASE_URL;
-
-const isActive = (path: string) => {
-  const fullPath = path === "/" ? base : `${base}${path}`.replace(/\/+/g, '/');
-  if (path === "/") {
-    return pathname === fullPath || pathname === base;
-  }
-  return pathname.startsWith(fullPath);
-};
+const links = [
+  { label: 'About', href: `${base}/about`.replace(/\/+/g, '/') },
+  { label: 'Contact', href: `${base}/contact`.replace(/\/+/g, '/') },
+];
+const navLink = 'inline-flex min-h-11 items-center whitespace-nowrap text-sm font-medium tracking-tight opacity-80 transition-opacity hover:opacity-100 focus-visible:opacity-100 aria-[current=page]:opacity-100 md:text-base';
 ---
 
-<header class={cinematic ? 'absolute inset-x-0 top-0 z-10' : 'editorial-rule border-b'}>
-  <div class={cinematic ? 'px-[clamp(1.25rem,4vw,4rem)] py-4 md:py-6' : 'editorial-shell py-4 md:py-5'}>
-    <nav class="flex items-center justify-between gap-3" aria-label="Main navigation">
-      <a
-        href={base}
-        class="group flex items-center gap-3"
-      >
-        <div class="relative">
-          <span class:list={['whitespace-nowrap font-serif font-medium tracking-tight transition-colors', cinematic
-            ? 'text-[1.4rem] text-[#f7f2e9] group-hover:text-white md:text-3xl'
-            : 'text-xl text-gray-900 group-hover:text-gray-600 dark:text-gray-100 dark:group-hover:text-gray-400 md:text-2xl']}>
-            {siteConfig.siteName}
-          </span>
-          {!cinematic && <div class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gray-900 dark:bg-gray-100 transition-all duration-300 group-hover:w-full"></div>}
-        </div>
+<header class={cinematic ? 'absolute inset-x-0 top-0 z-10 text-[#f7f2e9]' : 'editorial-rule border-b'}>
+  <div class="px-[clamp(1.25rem,4vw,4rem)] py-4 md:py-6">
+    <nav class="flex items-center justify-between gap-2 sm:gap-3" aria-label="Main navigation">
+      <a href={base} class="inline-flex min-h-11 items-center whitespace-nowrap font-serif text-[1.4rem] font-medium tracking-tight transition-opacity hover:opacity-80 md:text-3xl">
+        {siteConfig.siteName}
       </a>
-      
-      <div class:list={['flex items-center', cinematic ? 'gap-3 sm:gap-6 md:gap-8' : 'gap-6 md:gap-10']}>
-        <a
-          href={`${base}/about`.replace(/\/+/g, '/')}
-          class={`tracking-tight transition-colors duration-200 ${cinematic
-            ? 'text-sm text-white/85 hover:text-white md:text-base'
-            : `text-base md:text-lg ${isActive("/about")
-              ? "text-gray-900 dark:text-gray-100" 
-              : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"}`
-          }`}
-        >
-          About
-        </a>
-        <a
-          href={`${base}/contact`.replace(/\/+/g, '/')}
-          class={`tracking-tight transition-colors duration-200 ${cinematic
-            ? 'text-sm text-white/85 hover:text-white md:text-base'
-            : `text-base md:text-lg ${isActive("/contact")
-              ? "text-gray-900 dark:text-gray-100" 
-              : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"}`
-          }`}
-        >
-          Contact
-        </a>
+
+      <div class="flex items-center gap-2.5 sm:gap-6 md:gap-8">
+        {mobileNavLink && (
+          <a href={mobileNavLink.href} class:list={[navLink, 'md:hidden']}>{mobileNavLink.label}</a>
+        )}
         {showThemeToggle && <ThemeToggle onDarkBackground={cinematic} />}
+        {links.map(link => (
+          <a href={link.href} class={navLink} aria-current={pathname.startsWith(link.href) ? 'page' : undefined}>{link.label}</a>
+        ))}
       </div>
     </nav>
   </div>
