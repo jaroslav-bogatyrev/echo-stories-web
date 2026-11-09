@@ -50,7 +50,6 @@ const displayNumber = (number: number) => String(number).padStart(2, '0');
 
 <Layout
   cinematicHeader={featured.length > 0}
-  showThemeToggle={false}
   mobileNavLink={featured.length > 0 && moreProjects.length > 0 ? { href: '#more-projects', label: 'More' } : undefined}
   title="Echo Stories | Independent Film Production Company"
   description="Echo Stories is a Prague-based independent film production company focused on creative, author-driven fiction and documentary films from Europe, Central Asia, and the Middle East."
@@ -80,7 +79,7 @@ const displayNumber = (number: number) => String(number).padStart(2, '0');
 
           {index === 0 && (
             <div class="hidden items-center justify-between gap-3 border-t border-white/30 pt-3 md:flex">
-              <p class="frame-label flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-[#d8ab78]" aria-hidden="true"></span> Selected films</p>
+              <p class="frame-label flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-[#d8ab78]" aria-hidden="true"></span> Selected</p>
               {moreProjects.length > 0 && (
                 <a class="frame-link inline-flex min-h-9 items-center gap-2 text-sm font-medium" href="#more-projects">More <ArrowIcon direction="down-right" /></a>
               )}
@@ -97,7 +96,7 @@ const displayNumber = (number: number) => String(number).padStart(2, '0');
               <h2 id={`${frameId}-title`} class="frame-title mt-2 font-serif">{project.title.en}</h2>
               {project.title.cz && <p class="mt-2 font-serif text-lg italic text-white/75 md:text-2xl">{project.title.cz}</p>}
               {project.logline && <p class="mt-4 max-w-xl text-base text-white/90 md:text-lg">{project.logline.en}</p>}
-              <a class="frame-link mt-3 inline-flex min-h-11 items-center gap-2 text-base font-medium" href={project.href}>View project <ArrowIcon direction="up-right" /></a>
+              <a class="frame-link mt-3 inline-flex min-h-11 items-center gap-2 text-base font-medium" href={project.href} aria-label={`View ${project.title.en}`}>View <ArrowIcon direction="up-right" /></a>
             </div>
             <div class="mt-3 flex shrink-0 items-center justify-between gap-3 border-t border-white/30 pt-3 sm:mt-0 sm:grid sm:justify-items-end sm:border-0 sm:pt-0">
               <p class="text-base tabular-nums" aria-label={`Film ${index + 1} of ${featured.length}`}>
@@ -109,7 +108,7 @@ const displayNumber = (number: number) => String(number).padStart(2, '0');
                   href={nextProject ? `#frame-${nextProject.slug}` : '#more-projects'}
                   aria-label={nextProject ? `Next film: ${nextProject.title.en}` : 'More'}
                 >
-                  {nextProject ? 'Next film' : 'More'} <span class="flex h-11 w-11 items-center justify-center rounded-full border border-white/40 group-hover:bg-white/10 group-focus-visible:bg-white/10"><ArrowIcon direction="down" class="h-5 w-5" /></span>
+                  {!nextProject && 'More'} <span class="flex h-11 w-11 items-center justify-center rounded-full border border-white/40 group-hover:bg-white/10 group-focus-visible:bg-white/10"><ArrowIcon direction="down" class="h-5 w-5" /></span>
                 </a>
               )}
             </div>
@@ -130,7 +129,7 @@ const displayNumber = (number: number) => String(number).padStart(2, '0');
     <section id="more-projects" class="editorial-shell py-14 md:py-20" aria-labelledby="more-projects-title">
       <div class="editorial-rule mb-6 flex flex-wrap items-end justify-between gap-4 border-b pb-5 md:mb-8">
         <h2 id="more-projects-title" class="font-serif text-4xl tracking-tight md:text-6xl">More</h2>
-        {featured.length > 0 && <a href="#film-reel" class="inline-flex items-center gap-2 text-sm underline underline-offset-4">Back to films <ArrowIcon direction="up" /></a>}
+        {featured.length > 0 && <a href="#film-reel" class="inline-flex items-center gap-2 text-sm underline underline-offset-4">Back <ArrowIcon direction="up" /></a>}
       </div>
       <ul class="project-rail grid snap-x snap-mandatory auto-cols-[82%] grid-flow-col gap-4 overflow-x-auto pb-3 sm:auto-cols-[46%] md:grid-flow-row md:auto-cols-auto md:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0">
         {moreProjects.map(project => {

@@ -4,35 +4,34 @@ import ThemeToggle from "./ThemeToggle.astro";
 
 interface Props {
   cinematic?: boolean;
-  showThemeToggle?: boolean;
   mobileNavLink?: { href: string; label: string };
 }
 
-const { cinematic = false, showThemeToggle = true, mobileNavLink } = Astro.props;
+const { cinematic = false, mobileNavLink } = Astro.props;
 const pathname = Astro.url.pathname;
 const base = import.meta.env.BASE_URL;
 const links = [
   { label: 'About', href: `${base}/about`.replace(/\/+/g, '/') },
   { label: 'Contact', href: `${base}/contact`.replace(/\/+/g, '/') },
 ];
-const navLink = 'inline-flex min-h-11 items-center whitespace-nowrap text-sm font-medium tracking-tight opacity-80 transition-opacity hover:opacity-100 focus-visible:opacity-100 aria-[current=page]:opacity-100 md:text-base';
+const navLink = 'inline-flex min-h-11 items-center whitespace-nowrap text-sm font-medium tracking-tight underline-offset-4 opacity-80 transition-opacity hover:opacity-100 focus-visible:opacity-100 aria-[current=page]:underline aria-[current=page]:opacity-100 md:text-base';
 ---
 
-<header class={cinematic ? 'absolute inset-x-0 top-0 z-10 text-[#f7f2e9]' : 'editorial-rule border-b'}>
-  <div class="px-[clamp(1.25rem,4vw,4rem)] py-4 md:py-6">
+<header class:list={[cinematic && 'absolute inset-x-0 top-0 z-10 text-[#f7f2e9]']}>
+  <div class:list={['mx-[clamp(1.25rem,4vw,4rem)] py-4 max-[374px]:mx-4 md:py-6', !cinematic && 'border-b border-black/20 dark:border-white/30']}>
     <nav class="flex items-center justify-between gap-2 sm:gap-3" aria-label="Main navigation">
-      <a href={base} class="inline-flex min-h-11 items-center whitespace-nowrap font-serif text-[1.4rem] font-medium tracking-tight transition-opacity hover:opacity-80 md:text-3xl">
+      <a href={base} class="inline-flex min-h-11 items-center whitespace-nowrap font-serif text-[1.4rem] font-medium tracking-tight transition-opacity hover:opacity-80 max-[374px]:text-lg md:text-3xl">
         {siteConfig.siteName}
       </a>
 
-      <div class="flex items-center gap-2.5 sm:gap-6 md:gap-8">
+      <div class="flex items-center gap-2.5 max-[374px]:gap-1.5 sm:gap-6 md:gap-8">
         {mobileNavLink && (
           <a href={mobileNavLink.href} class:list={[navLink, 'md:hidden']}>{mobileNavLink.label}</a>
         )}
-        {showThemeToggle && <ThemeToggle onDarkBackground={cinematic} />}
         {links.map(link => (
           <a href={link.href} class={navLink} aria-current={pathname.startsWith(link.href) ? 'page' : undefined}>{link.label}</a>
         ))}
+        <ThemeToggle onDarkBackground={cinematic} />
       </div>
     </nav>
   </div>
