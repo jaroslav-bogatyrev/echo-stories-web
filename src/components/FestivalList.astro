@@ -18,10 +18,10 @@ const groups = [
 <div class="space-y-8 text-gray-700 dark:text-gray-300">
   {groups.filter(group => group.entries.length > 0).map(group => (
     <div>
-      <h3 class="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-600 dark:text-gray-400">{group.title}</h3>
-      <ul class:list={['grid gap-px overflow-hidden rounded-lg border border-gray-200 bg-gray-200 dark:border-gray-800 dark:bg-gray-800', group.entries.length > 1 && 'lg:grid-cols-2']}>
+      <h3 class="editorial-label mb-3">{group.title}</h3>
+      <ul class:list={['editorial-rule grid overflow-hidden rounded-lg border', group.entries.length > 1 && 'lg:grid-cols-2 lg:gap-x-px']}>
         {group.entries.map(festival => (
-          <li class:list={['flex items-center gap-4 bg-white px-4 py-4 dark:bg-neutral-950 sm:px-5', group.entries.length > 1 && 'lg:last:odd:col-span-2']}>
+          <li class:list={['editorial-rule flex items-center gap-4 border-b bg-[var(--editorial-panel)] px-4 py-4 last:border-b-0 sm:px-5', group.entries.length > 1 && 'lg:last:odd:col-span-2 lg:even:border-l']}>
             <div class="min-w-0 flex-1">
               <h4 class="font-medium leading-snug text-gray-900 dark:text-gray-100">
                 {festival.url

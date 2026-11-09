@@ -3,166 +3,221 @@ import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import Layout from '@/layouts/Layout.astro';
 
-const projects = await getCollection('projects');
 const base = import.meta.env.BASE_URL;
-
+const entries = await getCollection('projects');
 const images = import.meta.glob<{ default: ImageMetadata }>('/src/content/projects/**/*.{jpg,jpeg,png,svg}', { eager: true });
 
-const projectsWithImages = await Promise.all(
-  projects.map(async (project) => {
-    const slug = project.id.replace('/index', '');
-    const imagePath = `/src/content/projects/${slug}/${project.data.image.replace('./', '')}`;
-    const imageModule = images[imagePath];
-    const laurels = (project.data.festivals ?? []).flatMap(festival => {
-      if (!festival.laurel || festival.featureLaurel === false) return [];
-      const image = images[`/src/content/projects/${slug}/${festival.laurel.replace('./', '')}`]?.default;
-      return image ? [{ image, name: festival.name }] : [];
-    });
-    return { ...project, imageModule: imageModule?.default, slug, laurels };
-  })
-);
-
-const sortedProjects = projectsWithImages.sort((a, b) => {
-  if (a.data.order !== undefined && b.data.order !== undefined) return a.data.order - b.data.order;
-  return b.data.year - a.data.year;
-});
-
-const [hero, ...rest] = sortedProjects;
-
-const statusConfig: Record<string, { label: string; classes: string }> = {
-  'completed':        { label: 'Completed',         classes: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' },
-  'released':         { label: 'Released',           classes: 'bg-blue-500/20 text-blue-300 border border-blue-500/30' },
-  'in postproduction':{ label: 'Post-production',    classes: 'bg-amber-500/20 text-amber-300 border border-amber-500/30' },
-  'preproduction':    { label: 'Pre-production',     classes: 'bg-violet-500/20 text-violet-300 border border-violet-500/30' },
-  'in development':   { label: 'In Development',     classes: 'bg-slate-500/20 text-slate-300 border border-slate-500/30' },
+const statusLabels: Record<string, string> = {
+  completed: 'Completed',
+  released: 'Released',
+  'in postproduction': 'Post-production',
+  preproduction: 'Pre-production',
+  'in development': 'In development',
 };
+
+const imagePositions: Record<string, string> = {
+  'night-games': '70% 50%',
+  'apple-tree': '43% 50%',
+};
+
+const projects = entries.map(entry => {
+  const project = entry.data;
+  const slug = entry.id.replace('/index', '');
+  const imageDir = `/src/content/projects/${slug}`;
+  const image = images[`${imageDir}/${project.image.replace('./', '')}`]?.default;
+  const laurels = (project.festivals ?? []).flatMap(festival => {
+    if (!festival.laurel || festival.featureLaurel === false) return [];
+    const laurelImage = images[`${imageDir}/${festival.laurel.replace('./', '')}`]?.default;
+    return laurelImage ? [{ image: laurelImage, name: festival.name }] : [];
+  });
+
+  return {
+    ...project,
+    slug,
+    image,
+    laurels,
+    href: `${base}/${slug}`.replace(/\/+/g, '/'),
+    statusLabel: statusLabels[project.status] ?? project.status,
+  };
+}).sort((left, right) => (left.order ?? Infinity) - (right.order ?? Infinity) || right.year - left.year);
+
+const featured = projects.filter(project => !project.locked && project.image).slice(0, 3);
+const moreProjects = projects.filter(project => !featured.includes(project));
+const displayNumber = (number: number) => String(number).padStart(2, '0');
 ---
 
 <Layout
+  cinematicHeader={featured.length > 0}
+  showThemeToggle={false}
   title="Echo Stories | Independent Film Production Company"
   description="Echo Stories is a Prague-based independent film production company focused on creative, author-driven fiction and documentary films from Europe, Central Asia, and the Middle East."
 >
-  <div class="mx-auto max-w-7xl px-4 py-12">
+  <h1 class="sr-only">Echo Stories — Independent film production</h1>
 
-    <!-- Hero Project -->
-    {hero && (() => {
-      const isLocked = hero.data.locked === true;
-      const status = statusConfig[hero.data.status] ?? { label: hero.data.status, classes: 'bg-slate-500/20 text-slate-300 border border-slate-500/30' };
-      const inner = (
-        <div class="relative w-full overflow-hidden bg-gray-900 aspect-[4/3] md:aspect-[16/9] lg:aspect-[21/9] rounded-lg border border-gray-200 dark:border-gray-700">
-          {hero.imageModule && (
+  <div id="film-reel" class="bg-neutral-950 text-[#f7f2e9]">
+    {featured.map((project, index) => {
+      const nextProject = featured[index + 1];
+      const frameId = `frame-${project.slug}`;
+      return (
+        <section id={frameId} class="film-frame relative isolate flex flex-col border-b border-white/15" aria-labelledby={`${frameId}-title`}>
+          {project.image && (
             <Image
-              src={hero.imageModule}
-              alt={hero.data.title.en}
-              class={`h-full w-full object-cover object-top transition-transform duration-700 ${isLocked ? 'blur-sm scale-105' : 'group-hover:scale-105'}`}
-              widths={[800, 1200, 1920]}
-              sizes="100vw"
+              src={project.image}
+              alt=""
+              class="absolute inset-0 -z-10 h-full w-full object-cover"
+              style={{ objectPosition: imagePositions[project.slug] ?? 'center' }}
+              widths={[640, 960, 1440, 1920]}
+              sizes="(max-width: 767px) 170vh, 100vw"
+              loading={index === 0 ? 'eager' : 'lazy'}
+              fetchpriority={index === 0 ? 'high' : 'auto'}
             />
           )}
-          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-          {hero.laurels.length > 0 && (
-            <ul aria-label="Selected festival laurels" class="pointer-events-none absolute left-4 top-4 flex items-center gap-2 sm:left-6 sm:top-6 sm:gap-4 md:left-10 lg:top-8 lg:gap-5">
-              {hero.laurels.slice(0, 4).map(laurel => (
-                <li>
-                  <Image src={laurel.image} alt={laurel.name} width={192} class="h-10 w-[3.25rem] object-contain brightness-0 invert drop-shadow-sm sm:h-14 sm:w-[4.75rem] lg:h-16 lg:w-24" loading="eager" />
-                </li>
+          <div class="frame-wash absolute inset-0 -z-10" aria-hidden="true"></div>
+
+          {index === 0 && (
+            <div class="flex items-center justify-between gap-3 border-t border-white/30 pt-3">
+              <p class="frame-label flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-[#d8ab78]" aria-hidden="true"></span> Selected films</p>
+              {moreProjects.length > 0 && (
+                <a class="frame-link inline-flex min-h-9 items-center gap-2 text-sm font-medium" href="#more-projects">More projects <span aria-hidden="true">↘</span></a>
+              )}
+            </div>
+          )}
+
+          {project.laurels.length > 0 && (
+            <ul aria-label="Festival laurels" class="mt-3 flex max-w-[17.5rem] flex-wrap items-center gap-x-2 gap-y-1 sm:mt-4 sm:max-w-[24rem] md:max-w-none md:gap-x-3">
+              {project.laurels.map(laurel => (
+                <li><Image src={laurel.image} alt={laurel.name} width={192} class="h-11 w-12 object-contain brightness-0 invert sm:h-14 sm:w-16 lg:h-16 lg:w-20" /></li>
               ))}
             </ul>
           )}
-          {isLocked && (
-            <div class="absolute inset-0 flex items-center justify-center">
-              <div class="flex items-center gap-2 text-white/60 text-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-                Coming soon
-              </div>
-            </div>
-          )}
-          <div class="absolute bottom-0 left-0 right-0 p-6 md:p-10">
-            <span class={`mb-3 inline-block text-xs font-medium px-2.5 py-1 rounded-full ${status.classes}`}>{status.label}</span>
-            <h2 class="mb-2 font-serif text-3xl md:text-5xl text-white leading-tight">
-              {hero.data.title.en}
-              {hero.data.title.cz && <span class="italic text-white/70"> \ {hero.data.title.cz}</span>}
-            </h2>
-            <div class="flex flex-wrap gap-3 text-sm text-white/60 mb-3">
-              <span class="capitalize">{hero.data.category.join(', ')}</span>
-              <span>•</span>
-              <span>{hero.data.year}</span>
-              {hero.data.duration && <><span>•</span><span>{hero.data.duration}</span></>}
-            </div>
-            {hero.data.logline && (
-              <p class="text-white/80 text-base md:text-lg max-w-2xl">{hero.data.logline.en}</p>
-            )}
-          </div>
-        </div>
-      );
-      return isLocked
-        ? <div class="mb-10 cursor-not-allowed opacity-80">{inner}</div>
-        : <a href={`${base}/${hero.slug}`.replace(/\/+/g, '/')} class="group block mb-10">{inner}</a>;
-    })()}
 
-    <!-- Remaining Projects Grid -->
-    {rest.length > 0 && (
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {rest.map(project => {
-          const isLocked = project.data.locked === true;
-          const status = statusConfig[project.data.status] ?? { label: project.data.status, classes: 'bg-slate-500/20 text-slate-300 border border-slate-500/30' };
-          const inner = (
-            <div class="relative aspect-video w-full overflow-hidden bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
-              {project.imageModule && (
-                <Image
-                  src={project.imageModule}
-                  alt={project.data.title.en}
-                  class={`h-full w-full object-cover transition-transform duration-500 ${isLocked ? 'blur-sm scale-105' : 'group-hover:scale-105'}`}
-                  widths={[400, 800]}
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                />
+          <div class="frame-content mt-auto items-end justify-between gap-6 sm:flex">
+            <div class="min-w-0">
+              <p class="frame-label text-[#ecd0ad]">{[project.statusLabel, project.year, project.duration].filter(Boolean).join(' · ')}</p>
+              <h2 id={`${frameId}-title`} class="frame-title mt-2 font-serif">{project.title.en}</h2>
+              {project.title.cz && <p class="mt-2 font-serif text-lg italic text-white/75 md:text-2xl">{project.title.cz}</p>}
+              {project.logline && <p class="mt-4 max-w-xl text-base text-white/90 md:text-lg">{project.logline.en}</p>}
+              <a class="frame-link mt-3 inline-flex min-h-11 items-center gap-2 text-base font-medium" href={project.href}>View project <span aria-hidden="true">↗</span></a>
+            </div>
+            <div class="mt-3 flex shrink-0 items-center justify-between gap-3 border-t border-white/30 pt-3 sm:mt-0 sm:grid sm:justify-items-end sm:border-0 sm:pt-0">
+              <p class="text-base tabular-nums" aria-label={`Film ${index + 1} of ${featured.length}`}>
+                {displayNumber(index + 1)} <span class="text-white/65">/ {displayNumber(featured.length)}</span>
+              </p>
+              {(nextProject || moreProjects.length > 0) && (
+                <a
+                  class="group inline-flex items-center gap-3 text-sm font-medium"
+                  href={nextProject ? `#frame-${nextProject.slug}` : '#more-projects'}
+                  aria-label={nextProject ? `Next film: ${nextProject.title.en}` : 'More projects'}
+                >
+                  {nextProject ? 'Next film' : 'More projects'} <span class="flex h-11 w-11 items-center justify-center rounded-full border border-white/40 text-xl group-hover:bg-white/10 group-focus-visible:bg-white/10" aria-hidden="true">↓</span>
+                </a>
               )}
-              <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-              {project.laurels.length > 0 && (
-                <ul aria-label="Selected festival laurels" class="pointer-events-none absolute left-3 top-3 flex items-center gap-2">
-                  {project.laurels.slice(0, 3).map(laurel => (
-                    <li>
-                      <Image src={laurel.image} alt={laurel.name} width={96} class="h-9 w-12 object-contain brightness-0 invert drop-shadow-sm" />
-                    </li>
-                  ))}
-                </ul>
-              )}
-              {isLocked && (
-                <div class="absolute inset-0 flex items-center justify-center">
-                  <div class="flex items-center gap-2 text-white/50 text-xs">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
-                    Coming soon
-                  </div>
-                </div>
-              )}
-              <div class="absolute bottom-0 left-0 right-0 p-4 md:p-5">
-                <span class={`inline-block text-xs font-medium px-2 py-0.5 rounded-full mb-2 ${status.classes}`}>{status.label}</span>
-                <h2 class="font-serif text-lg md:text-xl text-white leading-snug">
-                  {project.data.title.en}
-                  {project.data.title.cz && <span class="italic text-white/60"> \ {project.data.title.cz}</span>}
-                </h2>
-                <div class="flex flex-wrap gap-2 text-xs text-white/55 mt-1">
-                  <span class="capitalize">{project.data.category.join(', ')}</span>
-                  <span>•</span>
-                  <span>{project.data.year}</span>
-                  {project.data.duration && <><span>•</span><span>{project.data.duration}</span></>}
-                </div>
-                {project.data.logline && (
-                  <p class="mt-2 text-white/70 text-xs line-clamp-2">{project.data.logline.en}</p>
+            </div>
+          </div>
+        </section>
+      );
+    })}
+  </div>
+
+  {moreProjects.length > 0 && (
+    <section id="more-projects" class="editorial-shell py-14 md:py-20" aria-labelledby="more-projects-title">
+      <div class="editorial-rule mb-6 flex flex-wrap items-end justify-between gap-4 border-b pb-5 md:mb-8">
+        <h2 id="more-projects-title" class="font-serif text-4xl tracking-tight md:text-6xl">More projects</h2>
+        {featured.length > 0 && <a href="#film-reel" class="text-sm underline underline-offset-4">Back to films ↑</a>}
+      </div>
+      <ul class="project-rail grid snap-x snap-mandatory auto-cols-[82%] grid-flow-col gap-4 overflow-x-auto pb-3 sm:auto-cols-[46%] md:grid-flow-row md:auto-cols-auto md:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0">
+        {moreProjects.map(project => {
+          const card = (
+            <>
+              <div class="editorial-rule aspect-[16/10] overflow-hidden rounded-sm border bg-[var(--editorial-panel)]">
+                {project.image && (
+                  <Image
+                    src={project.image}
+                    alt=""
+                    widths={[360, 540, 800]}
+                    sizes="(max-width: 639px) 82vw, (max-width: 767px) 46vw, 33vw"
+                    class:list={['h-full w-full object-cover', project.locked ? 'scale-105 blur-sm' : 'motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-[1.03]']}
+                  />
                 )}
               </div>
-            </div>
+              <div class="flex items-start justify-between gap-3 px-1 pt-4">
+                <div class="min-w-0">
+                  <h3 class="font-serif text-2xl leading-tight decoration-gray-400 underline-offset-4 group-hover:underline group-focus-visible:underline">{project.title.en}</h3>
+                  <p class="editorial-label mt-2">{project.locked ? 'Coming soon' : project.statusLabel}</p>
+                </div>
+                {!project.locked && <span class="mt-1 text-sm" aria-hidden="true">↗</span>}
+              </div>
+            </>
           );
-          return isLocked
-            ? <div class="cursor-not-allowed opacity-80">{inner}</div>
-            : <a href={`${base}/${project.slug}`.replace(/\/+/g, '/')} class="group block">{inner}</a>;
+          return (
+            <li class="min-w-0 snap-start">
+              {project.locked ? <div>{card}</div> : <a href={project.href} class="group block">{card}</a>}
+            </li>
+          );
         })}
-      </div>
-    )}
-
-  </div>
+      </ul>
+    </section>
+  )}
 </Layout>
+
+<style>
+  .project-rail {
+    scrollbar-width: thin;
+    scrollbar-color: var(--editorial-rule) transparent;
+  }
+
+  .film-frame {
+    min-height: 100svh;
+    padding: clamp(1.25rem, 4vw, 4rem);
+  }
+
+  .film-frame:first-child {
+    padding-top: clamp(4.5rem, 7vw, 6.25rem);
+  }
+
+  .frame-wash {
+    background:
+      linear-gradient(to top, #0c0b0a 0%, #0c0b0abb 20%, #0c0b0a00 64%),
+      linear-gradient(to bottom, #0c0b0ab0, #0c0b0a00 35%);
+  }
+
+  .frame-label {
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    line-height: 1.5;
+    text-transform: uppercase;
+  }
+
+  .frame-link {
+    text-decoration: underline;
+    text-decoration-color: #f7f2e968;
+    text-underline-offset: .3em;
+  }
+
+  .frame-link:hover,
+  .frame-link:focus-visible {
+    text-decoration-color: currentColor;
+  }
+
+  .frame-content {
+    padding-top: clamp(4rem, 22svh, 15rem);
+  }
+
+  .frame-title {
+    max-width: 14.5ch;
+    font-size: clamp(2.65rem, 6.25vw, 6.5rem);
+    letter-spacing: -.045em;
+    line-height: 1;
+    text-wrap: balance;
+  }
+
+  @media (min-width: 48rem) {
+    .frame-wash {
+      background:
+        linear-gradient(to top, #0c0b0af2, #0c0b0a00 68%),
+        linear-gradient(to right, #0c0b0a8c, #0c0b0a00 68%),
+        linear-gradient(to bottom, #0c0b0ac4, #0c0b0a00 35%);
+    }
+  }
+</style>

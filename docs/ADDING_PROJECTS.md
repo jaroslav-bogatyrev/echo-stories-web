@@ -155,7 +155,7 @@ pitching:
 
 Use `festivals` for confirmed festival selections and screenings. Use `selection` for the programme or competition and `award` for an actual prize. Set `market: true` for industry showcases. Set `featureLaurel: false` to show a laurel only on the project page.
 
-The home page displays up to four laurels on the hero image and up to three on other project cards, in the order they appear in `festivals`.
+The featured films on the home page display their laurels in the order they appear in `festivals`.
 
 ```yaml
 festivals:

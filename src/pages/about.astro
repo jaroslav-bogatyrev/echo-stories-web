@@ -7,13 +7,17 @@ const nunUrl = `${import.meta.env.BASE_URL}/nun`.replace(/\/+/g, '/');
   title="About Echo Stories - Independent Film Production Prague"
   description="Prague-based independent film production company founded by Iuliia Mamaeva. We develop author-driven fiction and documentary films from Europe, Central Asia, and the Middle East."
   type="website"
+  showFooter={false}
 >
-  <div class="max-w-3xl mx-auto px-6 py-12 md:py-16">
-    <h1 class="text-2xl md:text-3xl font-medium mb-8">About</h1>
+  <div class="editorial-shell py-12 md:py-20">
+    <header class="editorial-rule mb-8 border-b pb-7 md:mb-12 md:pb-10">
+      <h1 class="editorial-title font-serif">About</h1>
+    </header>
 
-    <div class="space-y-6 text-base md:text-lg leading-relaxed">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,1.65fr)_minmax(0,1fr)] lg:gap-16">
+    <div class="max-w-prose space-y-6 text-base leading-relaxed md:text-lg">
       <p>
-        <strong>Echo Stories</strong> is a Prague-based independent film production company founded by producer
+        We are a Prague-based independent film production company founded by producer
         <strong>Iuliia Mamaeva</strong>, specializing in author-driven fiction and documentary films.
         We connect European talent with filmmakers from Central Asia and the Middle East,
         building a slate defined by international collaboration and cross-regional storytelling.
@@ -46,29 +50,30 @@ const nunUrl = `${import.meta.env.BASE_URL}/nun`.replace(/\/+/g, '/');
       </p>
     </div>
     
-    <div class="mt-16">
-      <h2 class="text-xl font-medium mb-6">Selected Projects</h2>
-      <div class="space-y-3 text-base">
+    <aside class="editorial-rule border-t pt-7 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0" aria-labelledby="selected-projects">
+      <h2 id="selected-projects" class="mb-6 font-serif text-3xl">Selected Projects</h2>
+      <div class="space-y-5 text-base">
         <div>
-          <span class="font-medium">Completed:</span>
-          <a href={`${nunUrl}#festivals`} class="ml-2 text-gray-600 underline dark:text-gray-300">Nun (Jeptiška) — festival selections and industry showcase</a>
+          <p class="editorial-label mb-1">Completed</p>
+          <a href={`${nunUrl}#festivals`} class="text-gray-700 underline underline-offset-4 dark:text-gray-300">Nun (Jeptiška) — festival selections and industry showcase</a>
         </div>
         <div>
-          <span class="font-medium">Post-production:</span>
-          <span class="ml-2 text-gray-600 dark:text-gray-300">Night Games (short), The Apple Tree That Blossomed Twice (short)</span>
+          <p class="editorial-label mb-1">Post-production</p>
+          <p class="text-gray-700 dark:text-gray-300">Night Games (short), The Apple Tree That Blossomed Twice (short)</p>
         </div>
         <div>
-          <span class="font-medium">In Development:</span>
-          <ul class="mt-2 ml-4 space-y-1 text-gray-600 dark:text-gray-300 list-disc list-inside">
+          <p class="editorial-label mb-1">In development</p>
+          <ul class="space-y-1 text-gray-700 dark:text-gray-300">
             <li>Kupala Night (feature)</li>
             <li>
               Paralegal (horror-comedy mockumentary series)
-              <div class="ml-4 mt-0.5 text-sm text-gray-500 dark:text-gray-400">🏆 Writers' Vision Pitch Award @ Seriencamp Festival 2026</div>
+              <div class="mb-2 mt-1 text-sm text-gray-600 dark:text-gray-400"><span aria-hidden="true">🏆</span> Writers' Vision Pitch Award · Seriencamp Festival 2026</div>
             </li>
             <li>Ai-Ai (3D animated series)</li>
           </ul>
         </div>
       </div>
+    </aside>
     </div>
   </div>
 </Layout>

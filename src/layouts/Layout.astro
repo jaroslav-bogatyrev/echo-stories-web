@@ -8,13 +8,19 @@ interface Props {
   description?: string;
   image?: string;
   type?: 'website' | 'article';
+  cinematicHeader?: boolean;
+  showThemeToggle?: boolean;
+  showFooter?: boolean;
 }
 
 const {
   title,
   description = 'Echo Stories - Independent film production company focused on creative, author-driven projects',
   image,
-  type = 'website'
+  type = 'website',
+  cinematicHeader = false,
+  showThemeToggle = true,
+  showFooter = true,
 } = Astro.props;
 
 const base = import.meta.env.BASE_URL;
@@ -106,10 +112,10 @@ const imageURL = image ? new URL(image, Astro.site) : null;
     </script>
   </head>
   <body>
-    <Header />
+    <Header cinematic={cinematicHeader} showThemeToggle={showThemeToggle} />
     <main>
       <slot />
     </main>
-    <Footer />
+    {showFooter && <Footer />}
   </body>
 </html>

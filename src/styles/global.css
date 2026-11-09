@@ -5,15 +5,21 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #1a1a1a;
+  --background: #f8f6f1;
+  --foreground: #211e1a;
+  --editorial-accent: #805429;
+  --editorial-rule: #211e1a26;
+  --editorial-panel: #fffdfa;
   --font-sans: 'Inter', sans-serif;
   --font-serif: 'Playfair Display', serif;
 }
 
 .dark {
-  --background: #0a0a0a;
-  --foreground: #e8e8e8;
+  --background: #10100f;
+  --foreground: #eee8df;
+  --editorial-accent: #dfb78c;
+  --editorial-rule: #eee8df2b;
+  --editorial-panel: #171614;
 }
 
 body {
@@ -39,5 +45,35 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+@layer components {
+  .editorial-shell {
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 4vw, 4rem);
+  }
+
+  .editorial-title {
+    font-size: clamp(2.65rem, 5.8vw, 5.5rem);
+    line-height: 1.02;
+    letter-spacing: -.04em;
+    text-wrap: balance;
+  }
+
+  .editorial-label {
+    color: var(--editorial-accent);
+    font-family: var(--font-sans);
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    line-height: 1.5;
+    text-transform: uppercase;
+  }
+
+  .editorial-rule {
+    border-color: var(--editorial-rule);
   }
 }
