@@ -1,0 +1,29 @@
+<script>
+  const motion = window.matchMedia('(prefers-reduced-motion: no-preference)');
+
+  if (motion.matches) {
+    for (const image of document.querySelectorAll<HTMLImageElement>('[data-image-reveal]')) {
+      if (image.complete || !image.animate) continue;
+
+      image.dataset.revealPending = '';
+      const showImage = () => delete image.dataset.revealPending;
+
+      image.addEventListener('error', showImage, { once: true });
+      image.addEventListener('load', async () => {
+        try {
+          await image.decode();
+          if (motion.matches) {
+            image.animate([{ opacity: 0 }, { opacity: 1 }], {
+              duration: 440,
+              easing: 'ease-out',
+            });
+          }
+        } catch {
+          return;
+        } finally {
+          showImage();
+        }
+      }, { once: true });
+    }
+  }
+</script>

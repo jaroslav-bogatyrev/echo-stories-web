@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import Layout from '@/layouts/Layout.astro';
 import ArrowIcon from '@/components/ArrowIcon.astro';
 import LaurelList from '@/components/LaurelList.astro';
+import ImageReveal from '@/components/ImageReveal.astro';
 
 const base = import.meta.env.BASE_URL;
 const entries = await getCollection('projects');
@@ -67,6 +68,7 @@ const displayNumber = (number: number) => String(number).padStart(2, '0');
             <Image
               src={project.image}
               alt=""
+              data-image-reveal
               class="frame-image absolute inset-0 -z-10 h-full w-full object-cover"
               style={{ objectPosition: imagePositions[project.slug] ?? 'center' }}
               widths={[640, 960, 1440, 1920]}
@@ -90,7 +92,7 @@ const displayNumber = (number: number) => String(number).padStart(2, '0');
             <LaurelList laurels={project.laurels} class="mt-4 hidden md:flex" />
           )}
 
-          <div class="frame-content mt-auto items-end justify-between gap-6 sm:flex">
+          <div class:list={['frame-content mt-auto items-end justify-between gap-6 sm:flex', index === 0 && 'page-intro']}>
             <div class="min-w-0">
               <p class="frame-label text-[#ecd0ad]">{[project.statusLabel, project.year, project.duration].filter(Boolean).join(' · ')}</p>
               <h2 id={`${frameId}-title`} class="frame-title mt-2 font-serif">{project.title.en}</h2>
@@ -140,6 +142,7 @@ const displayNumber = (number: number) => String(number).padStart(2, '0');
                   <Image
                     src={project.image}
                     alt=""
+                    data-image-reveal
                     widths={[360, 540, 800]}
                     sizes="(max-width: 639px) 82vw, (max-width: 767px) 46vw, 33vw"
                     class:list={['h-full w-full object-cover', project.locked ? 'scale-105 blur-sm' : 'motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-[1.03]']}
@@ -164,6 +167,7 @@ const displayNumber = (number: number) => String(number).padStart(2, '0');
       </ul>
     </section>
   )}
+  <ImageReveal />
 </Layout>
 
 <style>
