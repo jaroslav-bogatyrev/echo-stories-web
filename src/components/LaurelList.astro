@@ -2,16 +2,32 @@
 import { Image } from 'astro:assets';
 
 interface Props {
-  laurels: { image: ImageMetadata; name: string }[];
+  laurels: { image: ImageMetadata; name: string; style?: 'large' | 'color' }[];
   class?: string;
+  lightSurface?: boolean;
 }
 
-const { laurels, class: className } = Astro.props;
+const { laurels, class: className, lightSurface = false } = Astro.props;
 ---
 
-<ul aria-label="Festival laurels" class:list={['flex flex-wrap items-center gap-x-2 gap-y-1 md:gap-x-3', className]}>
+<ul aria-label="Festivals, industry showcases and awards" class:list={['flex flex-wrap items-center gap-x-2 gap-y-1 md:gap-x-3', className]}>
   {laurels.map(laurel => (
-    <li><Image src={laurel.image} alt={laurel.name} width={192} loading="eager" fetchpriority="low" class="h-11 w-12 object-contain brightness-0 invert sm:h-14 sm:w-16 lg:h-16 lg:w-20" /></li>
+    <li>
+      <Image
+        src={laurel.image}
+        alt={laurel.name}
+        width={laurel.style === 'large' ? 384 : 192}
+        loading="eager"
+        fetchpriority="low"
+        class:list={[
+          'object-contain',
+          laurel.style === 'large' && 'h-16 w-36 sm:w-40 lg:h-24 lg:w-48',
+          laurel.style === 'color' && 'h-auto w-20 rounded-sm sm:w-24',
+          !laurel.style && 'h-11 w-12 sm:h-14 sm:w-16 lg:h-16 lg:w-20',
+          laurel.style !== 'color' && (lightSurface ? 'brightness-0 dark:invert' : 'brightness-0 invert'),
+        ]}
+      />
+    </li>
   ))}
 </ul>
 

@@ -36,7 +36,16 @@ const groups = [
               )}
             </div>
             {festival.image && (
-              <Image src={festival.image} alt="" class="h-14 w-16 shrink-0 object-contain dark:invert sm:w-20" />
+              <Image
+                src={festival.image}
+                alt=""
+                class:list={[
+                  'shrink-0 object-contain',
+                  festival.laurelStyle === 'large' && 'h-20 w-32 dark:invert sm:h-24 sm:w-40',
+                  festival.laurelStyle === 'color' && 'h-auto w-20 rounded-sm sm:w-24',
+                  !festival.laurelStyle && 'h-14 w-16 dark:invert sm:w-20',
+                ]}
+              />
             )}
           </li>
         ))}

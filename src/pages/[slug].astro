@@ -65,7 +65,7 @@ const stills = project.data.stills ? await Promise.all(
       return null;
     }
   })
-).then(results => results.filter((r): r is { image: ImageMetadata; alt: string; caption?: string } => r !== null && r.image !== undefined)) : [];
+).then(results => results.filter((r): r is NonNullable<typeof r> => r !== null && r.image !== undefined)) : [];
 
 const festivals = (project.data.festivals || []).map(festival => ({
   ...festival,
